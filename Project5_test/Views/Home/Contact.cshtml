@@ -1,0 +1,331 @@
+﻿@{
+    Layout = "/Views/Shared/_Layoutupdated.cshtml";
+}
+<title>Library Elite | Executive Contact</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Marcellus&family=Montserrat:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg-base: #050507;
+        --accent-gold: #c5a059;
+        --accent-gold-bright: #e5c17e;
+        --glass-card: rgba(10,10,12,0.85);
+        --glass-stroke: rgba(255,255,255,0.04);
+        --text-high: #ffffff;
+        --text-mid: #94949e;
+        --input-bg: rgba(255,255,255,0.01);
+        --transition-smooth: all 0.7s cubic-bezier(0.19,1,0.22,1);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        transition: var(--transition-smooth);
+    }
+
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        background-color: var(--bg-base);
+        color: var(--text-high);
+        font-family: 'Montserrat',sans-serif;
+        overflow-x: hidden;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contact-wrapper {
+        max-width: 1000px;
+        width: 100%;
+        padding: 40px 20px;
+        perspective: 1000px;
+    }
+
+    #container {
+        background: var(--glass-card);
+        backdrop-filter: blur(40px);
+        border: 1px solid var(--glass-stroke);
+        padding: 80px 100px;
+        position: relative;
+        box-shadow: 0 100px 150px -50px rgba(0,0,0,0.9);
+        transform-style: preserve-3d;
+    }
+
+    .gold-frame {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        border: 1px solid rgba(197,160,89,0.15);
+        pointer-events: none;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .pre-title {
+        display: block;
+        font-family: 'Cinzel',serif;
+        color: var(--accent-gold);
+        letter-spacing: 12px;
+        text-transform: uppercase;
+        font-size: .7rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    h1 {
+        font-family: 'Playfair Display',serif;
+        color: var(--text-high);
+        font-size: clamp(2.4rem,6vw,3.8rem);
+        font-weight: 400;
+        letter-spacing: -1px;
+        font-style: italic;
+    }
+
+    .separator {
+        width: 120px;
+        height: 1px;
+        background: linear-gradient(90deg,transparent,var(--accent-gold),transparent);
+        margin: 30px auto;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 40px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .form-field {
+        position: relative;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+        .form-field:focus-within {
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .form-field label {
+            display: block;
+            font-family: 'Cinzel',serif;
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            opacity: .7;
+        }
+
+    input, textarea {
+        width: 100%;
+        background: transparent;
+        border: none;
+        padding: 12px 0;
+        color: var(--text-high);
+        font-family: 'Montserrat',sans-serif;
+        font-size: .95rem;
+        font-weight: 200;
+        outline: none;
+    }
+
+    textarea {
+        height: 120px;
+        resize: none;
+        line-height: 1.8;
+    }
+
+    ::placeholder {
+        color: rgba(255,255,255,0.15);
+        font-style: italic;
+        font-size: .85rem;
+    }
+
+    .submit-container {
+        text-align: center;
+        margin-top: 70px;
+    }
+
+    #form_button {
+        background: transparent;
+        color: var(--text-high);
+        padding: 22px 70px;
+        border: 1px solid var(--accent-gold);
+        font-family: 'Cinzel',serif;
+        font-size: .8rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+    }
+
+        #form_button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--accent-gold);
+            z-index: -1;
+        }
+
+        #form_button:hover {
+            color: #000;
+            letter-spacing: 7px;
+        }
+
+            #form_button:hover::after {
+                width: 100%;
+            }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        color: var(--text-mid);
+        font-size: 14px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    /* Success Overlay */
+    .success-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(8, 8, 10, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        backdrop-filter: blur(10px);
+    }
+
+        .success-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    .success-content {
+        text-align: center;
+        max-width: 400px;
+        padding: 40px;
+        border: 1px solid var(--accent-gold);
+    }
+
+        .success-content svg {
+            width: 60px;
+            height: 60px;
+            fill: var(--accent-gold);
+            margin-bottom: 25px;
+        }
+
+        .success-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .success-content p {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            margin-bottom: 30px;
+        }
+</style>
+
+
+<div class="main-content">
+
+    <div class="contact-wrapper">
+
+        <div id="container">
+
+            <div class="gold-frame"></div>
+
+            <div class="header-section">
+                <span class="pre-title">Exclusive Liaison</span>
+                <h1>Keep In Touch</h1>
+                <div class="separator"></div>
+            </div>
+
+            <form asp-action="Submit" asp-controller="Feedback" method="post" id="contact_form" onsubmit="showSuccess()">
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+                        <label>Name</label>
+                        <input type="text" placeholder="Individual or Entity Name" name="name" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label>Email</label>
+                        <input type="email" placeholder="Preferred E-mail" name="email" required>
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label>Subject</label>
+                        <input type="text" placeholder="Subject of your request" name="Subject" required>
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label>Text message</label>
+<textarea name="message" placeholder="Please provide details for our curators..." required></textarea>
+                    </div>
+
+                </div>
+
+                <div class="submit-container">
+                    <button type="submit" id="form_button">Send a message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="successOverlay" class="success-overlay" onclick="this.classList.remove('show')">
+    <div class="success-content">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+        </svg>
+        <h2>Reception Confirmed</h2>
+        <p>Your inquiry has been encrypted and dispatched to our curators. Expect a response within one business day.</p>
+        <button class="cta-prime" style="background: none; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 10px 20px; cursor: pointer;">Acknowledge</button>
+    </div>
+</div>
+
+<script>
+    function showSuccess() {
+        const overlay = document.getElementById('successOverlay');
+        overlay.classList.add('show');
+        document.getElementById('contact_form').reset();
+    }
+
+    window.onload = () => {
+        setTimeout(() => {
+            document.querySelector('#container').classList.add('visible');
+        }, 16000);
+    };
+</script>
+
+

@@ -1,0 +1,64 @@
+/* top books section */
+.books-area {
+    height: 300px;
+    background: #d3c0b2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.books-images {
+    display: flex;
+    gap: 40px;
+}
+
+    .books-images img {
+        width: 120px;
+    }
+
+/* authors */
+.authors {
+    padding: 40px 60px;
+    background: #ededed;
+}
+
+    .authors h3 {
+        margin-bottom: 10px;
+    }
+
+.line {
+    height: 1px;
+    background: black;
+    margin-bottom: 30px;
+}
+
+.authors-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.author-card {
+    text-align: center;
+    width: 180px;
+}
+
+    .author-card img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+.info {
+    background: #d3b6a5;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+    .info h4 {
+        font-size: 14px;
+    }
+
+    .info p {
+        font-size: 12px;
+    }

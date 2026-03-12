@@ -1,0 +1,659 @@
+﻿@model List<Project5_test.Models.Book>
+@{
+    Layout = "/Views/Shared/_Layoutupdated.cshtml";
+}
+
+    <title>Library Elite | Books List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Montserrat:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0c;
+            --accent-gold: #d4af37;
+            --accent-gold-low: rgba(212, 175, 55, 0.1);
+            --glass-card: rgba(255, 255, 255, 0.02);
+            --glass-stroke: rgba(255, 255, 255, 0.05);
+            --text-high: #f8f8f8;
+            --text-mid: #a0a0a5;
+            --calendar-bg: #0f0f12;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-base);
+            color: var(--text-high);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            letter-spacing: 0.5px;
+        }
+
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+                pointer-events: none;
+            }
+
+    .custom-alert-container {
+        position: fixed;
+        top: 40px;
+        right: 40px;
+        z-index: 20000;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .custom-alert {
+        background: rgba(15, 15, 18, 0.85);
+        border-left: 3px solid var(--accent-gold);
+        border-top: 1px solid var(--glass-stroke);
+        border-right: 1px solid var(--glass-stroke);
+        border-bottom: 1px solid var(--glass-stroke);
+        padding: 20px 35px;
+        backdrop-filter: blur(20px);
+        transform: translateX(100px);
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-radius: 4px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+        .custom-alert.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+    .alert-icon {
+        color: var(--accent-gold);
+        font-size: 1.2rem;
+    }
+
+    .alert-content {
+        font-family: 'Marcellus', serif;
+        font-size: 0.85rem;
+        letter-spacing: 1.5px;
+        color: var(--text-high);
+        text-transform: uppercase;
+    }
+
+        .app-container {
+            display: flex;
+            max-width: 1800px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .catalogue {
+            flex: 1;
+            padding: 80px 60px;
+        }
+
+        .header-section {
+            margin-bottom: 80px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+            .reveal.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .pre-title {
+            font-family: 'Marcellus', serif;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-size: 0.75rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 400;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 50px;
+        }
+
+        .book-wrapper {
+            position: relative;
+            background: var(--glass-card);
+            padding: 20px;
+            border: 1px solid var(--glass-stroke);
+            border-radius: 4px;
+        }
+
+            .book-wrapper:hover {
+                background: rgba(255,255,255,0.04);
+                border-color: var(--accent-gold);
+                transform: translateY(-10px) !important;
+            }
+
+        .image-container {
+            width: 100%;
+            aspect-ratio: 3/4.5;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+
+            .image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                filter: grayscale(20%);
+            }
+
+        .book-wrapper:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .book-meta h3 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.2rem;
+            margin: 0 0 8px 0;
+            font-weight: 400;
+        }
+
+        .book-meta p {
+            color: var(--text-mid);
+            font-size: 0.8rem;
+            margin: 0 0 25px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .btn-prime {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+            .btn-prime:hover {
+                background: #fff;
+            }
+
+        .btn-sec {
+            background: transparent;
+            border: 1px solid var(--glass-stroke);
+            color: var(--text-mid);
+        }
+
+            .btn-sec:hover {
+                border-color: #ff4d4d;
+                color: #ff4d4d;
+            }
+
+        .scheduler-side {
+            width: 420px;
+            padding: 80px 40px;
+            background: linear-gradient(to bottom, rgba(15, 15, 18, 0.4), rgba(10, 10, 12, 0.9));
+            border-left: 1px solid var(--glass-stroke);
+            backdrop-filter: blur(40px);
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .side-heading {
+            font-family: 'Marcellus', serif;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--accent-gold);
+            opacity: 0.8;
+        }
+
+        .calendar-widget {
+            background: var(--calendar-bg);
+            border: 1px solid var(--glass-stroke);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .cal-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .month-display {
+            font-family: 'Marcellus', serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: var(--text-high);
+        }
+
+        .nav-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-mid);
+            border: 1px solid var(--glass-stroke);
+            border-radius: 50%;
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+
+            .nav-btn:hover {
+                color: var(--accent-gold);
+                border-color: var(--accent-gold);
+                background: var(--accent-gold-low);
+            }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .day-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+            color: var(--text-mid);
+            font-weight: 300;
+        }
+
+            .day-item.label {
+                font-size: 0.6rem;
+                color: var(--accent-gold);
+                text-transform: uppercase;
+                font-weight: 500;
+                opacity: 0.5;
+                margin-bottom: 10px;
+                cursor: default;
+            }
+
+            .day-item:hover:not(.empty):not(.label) {
+                background: rgba(255,255,255,0.03);
+                color: #fff;
+            }
+
+            .day-item.active {
+                background: var(--accent-gold) !important;
+                color: #000 !important;
+                font-weight: 600;
+                box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+            }
+
+            .day-item.today::after {
+                content: '';
+                position: absolute;
+                bottom: 6px;
+                width: 3px;
+                height: 3px;
+                background: var(--accent-gold);
+                border-radius: 50%;
+            }
+
+        .status-box {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-mid);
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            min-height: 20px;
+        }
+
+        .complete-booking {
+            margin-top: auto;
+            width: 100%;
+            padding: 22px;
+            background: none;
+            border: 1px solid var(--glass-stroke);
+            color: var(--text-mid);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.6s ease;
+        }
+
+            .complete-booking:hover:not(:disabled) {
+                border-color: var(--accent-gold);
+                color: var(--accent-gold);
+                background: var(--accent-gold-low);
+                letter-spacing: 6px;
+            }
+
+            .complete-booking:disabled {
+                opacity: 0.3;
+                cursor: not-allowed;
+            }
+
+        .time-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(10px);
+            z-index: 12000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-card {
+            background: #0f0f12;
+            padding: 60px;
+            border: 1px solid var(--glass-stroke);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+
+            .time-card h3 {
+                font-family: 'Marcellus', serif;
+                font-weight: 400;
+                letter-spacing: 3px;
+                margin-bottom: 40px;
+                text-transform: uppercase;
+            }
+
+        .slots-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .slot-btn {
+            padding: 18px;
+            border: 1px solid var(--glass-stroke);
+            background: rgba(255,255,255,0.01);
+            color: var(--text-mid);
+            cursor: pointer;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            transition: 0.3s;
+        }
+
+            .slot-btn:hover {
+                border-color: var(--accent-gold);
+                color: #fff;
+                background: var(--accent-gold-low);
+            }
+
+        .close-overlay {
+            background: none;
+            border: none;
+            color: var(--text-mid);
+            cursor: pointer;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+            .close-overlay:hover {
+                opacity: 1;
+                color: #ff4d4d;
+            }
+
+        @@media (max-width: 1200px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .scheduler-side {
+                width: 100%;
+                height: auto;
+                position: static;
+                padding: 60px 20px;
+            }
+
+            .calendar-widget {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+
+
+    <div id="alertContainer" class="custom-alert-container"></div>
+
+    <div class="app-container">
+        <main class="catalogue">
+            <header class="header-section">
+                <span class="pre-title reveal">Our Collection</span>
+                <h1 class="main-title reveal">Elite <br>Library</h1>
+                <p class="reveal" style="color: var(--text-mid); margin-top: 20px; font-weight: 300; max-width: 500px;">Elevating the standards of literary preservation and accessibility for the modern connoisseur.</p>
+            </header>
+
+            <div class="books-grid">
+            @foreach (var item in Model)
+            {
+                <div class="book-wrapper reveal">
+                    <div class="image-container">
+                        <img src="@item.ImagePath" alt="Book Cover">
+                    </div>
+                    <div class="book-meta">
+                        <h3>@item.BookName</h3>
+                        <p>@item.Author</p>
+                        <p>@item.Category</p>
+                        <div class="action-group">
+                            <form asp-action="BorrowRequest" asp-controller="Books" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="bookId" value="@item.BookId">
+                                <button type="submit" class="action-btn btn-prime" onclick="showAlert('Preparing executive review copy')">Reserve</button>
+                            </form>
+                            <form asp-action="BorrowRequest" asp-controller="Books" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="bookId" value="@item.BookId">
+                                <button type="submit" class="action-btn btn-prime" onclick="showAlert('Removed from priorities', true)">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+            </div>
+        </main>
+
+        <aside class="scheduler-side reveal">
+            <h2 class="side-heading">Concierge Booking</h2>
+
+            <div class="calendar-widget">
+                <div class="cal-nav">
+                    <span id="monthName" class="month-display">January 2024</span>
+                    <div style="display:flex; gap:8px">
+                        <div class="nav-btn" onclick="shiftMonth(-1)">←</div>
+                        <div class="nav-btn" onclick="shiftMonth(1)">→</div>
+                    </div>
+                </div>
+                <div class="days-grid" id="daysGrid">
+                    <!-- Grid items injected via JS -->
+                </div>
+            </div>
+
+            <div class="status-box" id="scheduleStatus">Please select your preferred visit date</div>
+
+        <form asp-action="RoomRequest" method="post" id="finalForm" onsubmit="event.preventDefault(); showAlert('Invitation Request Sent');">
+                <input type="hidden" name="reservationDate" id="hiddenDate">
+                <button type="submit" class="complete-booking" id="finalAction" disabled>Request Invitation</button>
+            </form>
+        </aside>
+    </div>
+
+    <div class="time-overlay" id="timeOverlay">
+        <div class="time-card">
+            <h3 style="color:var(--accent-gold)">Select Time Slot</h3>
+            <div class="slots-list">
+                <button class="slot-btn" onclick="confirmBooking('08:00 AM')">08:00 AM — Dawn Session</button>
+                <button class="slot-btn" onclick="confirmBooking('11:00 AM')">11:00 AM — Morning Study</button>
+                <button class="slot-btn" onclick="confirmBooking('02:00 PM')">02:00 PM — Afternoon Review</button>
+                <button class="slot-btn" onclick="confirmBooking('05:00 PM')">05:00 PM — Twilight Reading</button>
+            </div>
+            <button onclick="closeTime()" class="close-overlay">Cancel Selection</button>
+        </div>
+    </div>
+
+    <script>
+        let viewDate = new Date();
+        let pickedDay = null;
+        const monthLabels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            function showAlert(message, isError = false) {
+        const container = document.getElementById('alertContainer');
+        const alert = document.createElement('div');
+        alert.className = 'custom-alert';
+        if(isError) alert.style.borderLeftColor = '#ff4d4d';
+
+        alert.innerHTML = `
+            <div class="alert-icon">${isError ? '✕' : '✧'}</div>
+            <div class="alert-content">${message}</div>
+        `;
+
+        container.appendChild(alert);
+
+        // Trigger animation
+        setTimeout(() => alert.classList.add('show'), 10);
+
+        // Remove after 4 seconds
+        setTimeout(() => {
+            alert.classList.remove('show');
+            setTimeout(() => alert.remove(), 600);
+        }, 4000);
+    }
+
+        function initScrollReveal() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        function initCalendar() {
+            const y = viewDate.getFullYear();
+            const m = viewDate.getMonth();
+            const today = new Date();
+            document.getElementById('monthName').innerText = `${monthLabels[m]} ${y}`;
+
+            const grid = document.getElementById('daysGrid');
+            grid.innerHTML = '';
+
+            ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(day => {
+                const d = document.createElement('div');
+                d.className = 'day-item label';
+                d.innerText = day;
+                grid.appendChild(d);
+            });
+
+            const startIdx = new Date(y, m, 1).getDay();
+            const totalDays = new Date(y, m + 1, 0).getDate();
+
+            for(let i=0; i<startIdx; i++) grid.appendChild(Object.assign(document.createElement('div'), {className:'day-item empty'}));
+
+            for(let i=1; i<=totalDays; i++) {
+                const d = document.createElement('div');
+                d.className = 'day-item';
+                if(y === today.getFullYear() && m === today.getMonth() && i === today.getDate()) {
+                    d.classList.add('today');
+                }
+                d.innerText = i;
+                d.onclick = () => {
+                    pickedDay = i;
+                    document.querySelectorAll('.day-item').forEach(x => x.classList.remove('active'));
+                    d.classList.add('active');
+                    document.getElementById('timeOverlay').style.display = 'flex';
+                };
+                grid.appendChild(d);
+            }
+        }
+
+        function confirmBooking(time) {
+            const y = viewDate.getFullYear();
+            const m = (viewDate.getMonth() + 1).toString().padStart(2, '0');
+            const dayStr = pickedDay.toString().padStart(2, '0');
+
+            const hourMap = {"08:00 AM":"08:00", "11:00 AM":"11:00", "02:00 PM":"14:00", "05:00 PM":"17:00"};
+            const iso = `${y}-${m}-${dayStr}T${hourMap[time]}:00`;
+
+            document.getElementById('hiddenDate').value = iso;
+            document.getElementById('scheduleStatus').innerHTML = `Reservation set for <span style="color:var(--accent-gold)">${monthLabels[viewDate.getMonth()]} ${pickedDay}, at ${time}</span>`;
+            document.getElementById('finalAction').disabled = false;
+            closeTime();
+        }
+
+        function closeTime() { document.getElementById('timeOverlay').style.display = 'none'; }
+        function shiftMonth(dir) { viewDate.setMonth(viewDate.getMonth() + dir); initCalendar(); }
+
+        window.onload = () => {
+            initCalendar();
+            initScrollReveal();
+        };
+    </script>

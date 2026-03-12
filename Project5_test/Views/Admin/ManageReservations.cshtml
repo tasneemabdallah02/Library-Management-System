@@ -1,0 +1,346 @@
+﻿@model IEnumerable<Project5_test.Models.RoomReservation>
+@{
+    ViewData["Title"] = "Room Reservations";
+    Layout = "/Views/Shared/_LayoutDash.cshtml";
+}
+
+<!-- Google Fonts & Font Awesome -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    :root {
+        --dark-bg: #0a0a0a;
+        --card-bg: #141414;
+        --gold-primary: #d4af37;
+        --gold-secondary: #f3cf7a;
+        --gold-glow: rgba(212, 175, 55, 0.3);
+        --text-muted: #888;
+        --text-light: #e0e0e0;
+        --border-color: #2a2a2a;
+        --danger: #ff4757;
+        --success: #2ed573;
+        --warning: #ffa502;
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+    }
+
+    .rooms-wrapper {
+        padding: 30px;
+    }
+
+    /* الرأس (Header) */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        border-left: 4px solid var(--gold-primary);
+        padding-left: 20px;
+    }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            margin: 0;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    .count-indicator {
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--gold-primary);
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 1px solid var(--gold-primary);
+        font-weight: 600;
+    }
+
+    /* بطاقة الجدول الفاخرة */
+    .luxury-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .modern-table th {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            color: var(--gold-primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .modern-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            transition: 0.3s;
+        }
+
+        .modern-table tr:hover td {
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+    /* تفاصيل المستخدم والغرفة */
+    .user-info-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-weight: bold;
+    }
+
+    /* الشارات (Badges) */
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        display: inline-block;
+        border: 1px solid transparent;
+    }
+
+    .status-pending {
+        background: rgba(255, 165, 2, 0.1);
+        color: var(--warning);
+        border-color: var(--warning);
+    }
+
+    .status-approved {
+        background: rgba(46, 213, 115, 0.1);
+        color: var(--success);
+        border-color: var(--success);
+    }
+
+    .status-rejected {
+        background: rgba(255, 71, 87, 0.1);
+        color: var(--danger);
+        border-color: var(--danger);
+    }
+
+    .status-completed {
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--gold-secondary);
+        border-color: var(--gold-primary);
+    }
+
+    /* الأزرار */
+    .action-group {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #fff;
+    }
+
+    .btn-approve {
+        background-color: var(--success);
+    }
+
+    .btn-reject {
+        background-color: var(--danger);
+    }
+
+    .btn-complete {
+        background-color: var(--warning);
+        color: #000;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.2);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: var(--text-muted);
+    }
+
+    /* تحسين شكل الوقت والتاريخ */
+    .time-slot {
+        color: var(--gold-secondary);
+        font-weight: 500;
+        display: block;
+    }
+
+    .date-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+</style>
+
+<div class="rooms-wrapper">
+
+    <!-- رأس الصفحة -->
+    <div class="section-header">
+        <div>
+            <h2>Room <span style="color: var(--gold-secondary)">Reservations</span></h2>
+            <p style="color: var(--text-muted); margin: 8px 0 0;">Review and manage student study room requests</p>
+        </div>
+        <div class="count-indicator">
+            <i class="fas fa-clipboard-list"></i> @(Model?.Count() ?? 0) Total Requests
+        </div>
+    </div>
+
+    <!-- بطاقة الجدول -->
+    <div class="luxury-card">
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Room</th>
+                        <th>Reservation Details</th>
+                        <th>Current Status</th>
+                        <th>Management</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var reservation in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="user-info-box">
+                                        <div class="avatar-circle">
+                                            @(reservation.User?.FirstName?.Substring(0, 1) ?? "?")
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600; color: #fff;">@reservation.User?.FirstName @reservation.User?.LastName</div>
+                                            <small style="color: var(--text-muted)">ID: #@reservation.UserId</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="color: var(--gold-secondary); font-weight: 600;">
+                                        <i class="fas fa-door-closed"></i> @(reservation.Room?.RoomName ?? "N/A")
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="time-slot">
+                                        <i class="far fa-clock"></i> @reservation.StartTime - @reservation.EndTime
+                                    </span>
+                                    <span class="date-label">
+                                        <i class="far fa-calendar-alt"></i> @(reservation.ReservationDate?.ToString("MMM dd, yyyy") ?? "N/A")
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var statusClass = "status-pending";
+                                        var statusText = "Pending";
+                                        if (reservation.StatusId == 2) { statusClass = "status-approved"; statusText = "Confirmed"; }
+                                        else if (reservation.StatusId == 3) { statusClass = "status-completed"; statusText = "Completed"; }
+                                        else if (reservation.StatusId == 4) { statusClass = "status-rejected"; statusText = "Rejected"; }
+                                    }
+                                    <span class="status-badge @statusClass">@statusText</span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        @if (reservation.StatusId == 1)
+                                        {
+                                            <form asp-controller="Books" asp-action="ApproveRoom" method="post">
+                                                <input type="hidden" name="reservationId" value="@reservation.ReservationId" />
+                                                <button type="submit" class="btn-action btn-approve">
+                                                    <i class="fas fa-check"></i> Approve
+                                                </button>
+                                            </form>
+
+                                            <form asp-controller="Books" asp-action="RejectRoom" method="post">
+                                                <input type="hidden" name="reservationId" value="@reservation.ReservationId" />
+                                                <button type="submit" class="btn-action btn-reject">
+                                                    <i class="fas fa-times"></i> Reject
+                                                </button>
+                                            </form>
+                                        }
+                                        else if (reservation.StatusId == 2)
+                                        {
+                                            <form asp-controller="Books" asp-action="CompleteRoom" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="reservationId" value="@reservation.ReservationId" />
+                                                <button type="submit" class="btn-action btn-complete">
+                                                    <i class="fas fa-flag-checkered"></i> Complete
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: var(--text-muted); font-size: 0.8rem;">
+                                                <i class="fas fa-lock"></i> No Actions
+                                            </span>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <i class="fas fa-calendar-times fa-4x" style="margin-bottom: 20px; color: var(--border-color);"></i>
+                                    <h3>No Reservations Found</h3>
+                                    <p>There are no active or pending room reservation requests at this time.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (TempData["RoomRequestSuccessMessage"] != null)
+{
+    <script>
+        window.onload = function() {
+            console.log("Success: @TempData["RoomRequestSuccessMessage"]");
+        };
+    </script>
+}

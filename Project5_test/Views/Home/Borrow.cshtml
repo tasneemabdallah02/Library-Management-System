@@ -1,0 +1,224 @@
+﻿@model List<Project5_test.Models.Borrowing>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+        /* الخلفية المتدرجة كما في الصورة */
+        background: linear-gradient(to right, #c9ad8a 0%, #c9ad8a 65%, #4a4036 65%, #4a4036 100%);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        position: relative;
+    }
+
+        /* الخط الفاصل العمودي */
+        .main-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 65%;
+            width: 2px;
+            height: 100%;
+            background-color: rgba(0,0,0,0.1);
+        }
+
+    /* التنسيق العلوي */
+    .hero-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 50px;
+    }
+
+    .hero-text {
+        flex: 1;
+    }
+
+    .main-title {
+        font-family: 'Dancing Script', cursive;
+        font-size: 80px;
+        margin-bottom: 20px;
+        font-weight: normal;
+    }
+
+    .sub-text {
+        font-size: 20px;
+        max-width: 500px;
+        line-height: 1.5;
+    }
+
+    .hero-image img {
+        max-width: 100%;
+        border-radius: 5px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    /* تنسيق الكتب والتقويم */
+    .content-grid {
+        display: flex;
+        gap: 40px;
+    }
+
+    .books-gallery {
+        flex: 2;
+        display: flex;
+        gap: 15px;
+        align-items: flex-end;
+    }
+
+    .book-item {
+        text-align: center;
+        width: 120px;
+    }
+
+        .book-item img {
+            width: 100%;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .book-item p {
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+    /* قسم الحجز */
+    .reservation-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white; /* للنصوص فوق الخلفية الداكنة */
+    }
+
+        .reservation-section h3 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #222; /* ليتناسب مع الجزء الفاتح قليلاً أو غير لونه للأبيض */
+        }
+
+    .calendar-card {
+        background: #fdf5e6;
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        margin-bottom: 20px;
+    }
+
+    .inputs-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .input-btn {
+        background: #e0e0e0;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        min-width: 80px;
+    }
+
+    .confirm-btn {
+        background: #e0e0e0;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+        .confirm-btn:hover {
+            background: #ccc;
+        }
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Design</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- استيراد خطوط مشابهة من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+
+    <!-- مكانه هنا الـ Navbar الخاص بك -->
+    <nav style="height: 60px; background: #333; color: white; text-align: center; line-height: 60px;">الـ Navbar الخاص بك هنا</nav>
+
+    <div class="main-container">
+        <!-- الجزء العلوي -->
+        <header class="hero-section">
+            <div class="hero-text">
+                <h1 class="main-title">Library Book</h1>
+                <p class="sub-text">
+                    Read Books And Spend Time With Kids For An Afternoon In An Event Hosted By The Lily River Children's Foundation. Volunteer Now.
+                </p>
+            </div>
+            <div class="hero-image">
+                <img src="https://via.placeholder.com/500x350" alt="Open Book"> <!-- استبدلها بصورة الكتاب المفتوح -->
+            </div>
+        </header>
+
+        <!-- الجزء السفلي (الكتب والتقويم) -->
+        <div class="content-grid">
+
+            <!-- قائمة الكتب -->
+            <div class="books-gallery">
+                <!-- كتاب 1 -->
+                <div class="book-item">
+                    <img src="https://via.placeholder.com/120x180" alt="Book">
+                    <p>Read Books And Spend Time With Kids</p>
+                </div>
+                <!-- كتاب 2 -->
+                <div class="book-item">
+                    <img src="https://via.placeholder.com/120x180" alt="Book">
+                    <p>Read Books And Spend Time With Kids</p>
+                </div>
+                <!-- كتاب 3 -->
+                <div class="book-item">
+                    <img src="https://via.placeholder.com/120x180" alt="Book">
+                    <p>Read Books And Spend Time With Kids</p>
+                </div>
+                <!-- كتاب 4 -->
+                <div class="book-item">
+                    <img src="https://via.placeholder.com/120x180" alt="Book">
+                    <p>Read Books And Spend Time With Kids</p>
+                </div>
+                <!-- كتاب 5 -->
+                <div class="book-item">
+                    <img src="https://via.placeholder.com/120x180" alt="Book">
+                    <p>Read Books And Spend Time With Kids</p>
+                </div>
+            </div>
+
+            <!-- قسم الحجز والتقويم -->
+            <div class="reservation-section">
+                <h3>Reserve a room</h3>
+                <div class="calendar-card">
+                    <img src="https://via.placeholder.com/250x200" alt="June Calendar"> <!-- صورة التقويم -->
+                </div>
+
+                <div class="inputs-row">
+                    <button class="input-btn">Day</button>
+                    <button class="input-btn">Month</button>
+                    <button class="input-btn">Time</button>
+                </div>
+
+                <button class="confirm-btn">Confirm</button>
+            </div>
+
+        </div>
+    </div>
+

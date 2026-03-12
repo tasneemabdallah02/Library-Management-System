@@ -1,0 +1,385 @@
+﻿@model Project5_test.Models.User
+@{
+    Layout = null;
+}
+    <title>The Royal Archive - Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Marcellus&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* معالجة الملء التلقائي للمتصفح */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #fff;
+            -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        :root {
+            --gold-primary: #d4af37; /* ذهبي ملكي */
+            --gold-soft: rgba(212, 175, 55, 0.3);
+            --black-deep: #0a0a0b;
+            --glass-surface: rgba(15, 15, 18, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--black-deep);
+            overflow-x: hidden;
+        }
+
+        .login-viewport {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--black-deep);
+            background-image: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, var(--black-deep) 90%), url('https://images.unsplash.com/photo-1502239608882-93b729c6af43?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .magic-dust {
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 550px; /* جعل العرض أكبر قليلاً لاستيعاب الاسم الأول والأخير */
+            padding: 60px 50px;
+            background: var(--glass-surface);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(212, 175, 55, 0.02);
+            border-radius: 0;
+            perspective: 1000px;
+            transition: transform 0.1s ease-out;
+        }
+
+        .corner-ornament {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gold-primary);
+            opacity: 0.6;
+        }
+
+        .top-l {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .bottom-r {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+            .login-header h1 {
+                font-family: 'Cinzel', serif;
+                font-size: 2rem;
+                letter-spacing: 10px;
+                color: #fff;
+                text-transform: uppercase;
+                margin: 0;
+                text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            }
+
+            .login-header .gold-line {
+                width: 60px;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+                margin: 15px auto;
+            }
+
+        .row-fields {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+            width: 100%;
+        }
+
+            .form-group label {
+                display: block;
+                font-family: 'Cinzel', serif;
+                font-size: 0.6rem;
+                color: var(--gold-primary);
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                margin-bottom: 10px;
+                font-weight: 700;
+            }
+
+        .input-wrapper {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: 0.4s;
+        }
+
+            .input-wrapper::after {
+                content: "";
+                position: absolute;
+                bottom: -1px;
+                left: 50%;
+                width: 0;
+                height: 1px;
+                background: var(--gold-primary);
+                transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+                transform: translateX(-50%);
+            }
+
+            .input-wrapper:focus-within::after {
+                width: 100%;
+            }
+
+        .form-control {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 12px 0;
+            font-family: 'Marcellus', serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .btn-royal {
+            width: 100%;
+            padding: 20px;
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.5s;
+            z-index: 1;
+            margin-top: 10px;
+        }
+
+            .btn-royal::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: var(--gold-primary);
+                transition: 0.5s;
+                z-index: -1;
+            }
+
+            .btn-royal:hover {
+                color: #000;
+            }
+
+                .btn-royal:hover::before {
+                    left: 0;
+                }
+
+        .divider {
+            margin: 40px 0;
+            text-align: center;
+            position: relative;
+        }
+
+            .divider::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            }
+
+            .divider span {
+                position: relative;
+                background: var(--glass-surface);
+                padding: 0 20px;
+                color: rgba(255, 255, 255, 0.2);
+                font-family: 'Cinzel';
+                font-size: 0.6rem;
+                letter-spacing: 4px;
+            }
+
+        .google-btn {
+            width: 100%;
+            padding: 16px;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            color: #fff;
+            font-family: 'Marcellus';
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: 0.4s;
+        }
+
+            .google-btn:hover {
+                background: rgba(212, 175, 55, 0.1);
+            }
+
+        .error-text {
+            color: #ff7675;
+            font-size: 0.65rem;
+            font-family: 'Montserrat';
+            margin-top: 5px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        .utility-links {
+            text-align: center;
+            margin-top: 30px;
+            font-family: 'Montserrat';
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.3);
+        }
+
+            .utility-links a {
+                color: var(--gold-primary);
+                text-decoration: none;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+                .utility-links a:hover {
+                    text-shadow: 0 0 10px var(--gold-primary);
+                }
+
+        @@media (max-width: 600px) {
+            .row-fields {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .login-card {
+                padding: 40px 25px;
+            }
+        }
+    </style>
+
+
+    <div class="login-viewport">
+        <div class="magic-dust"></div>
+
+        <div class="login-card">
+            <div class="corner-ornament top-l"></div>
+            <div class="corner-ornament bottom-r"></div>
+
+            <div class="login-header">
+                <h1>Elite Registry</h1>
+                <div class="gold-line"></div>
+                <p style="font-family: 'Marcellus'; color: rgba(255,255,255,0.4); font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase;">Begin Your Legacy</p>
+            </div>
+
+            <form asp-action="SignUp" asp-controller="Account" method="post">
+                <div class="row-fields">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <div class="input-wrapper">
+                            <input asp-for="FirstName" class="form-control" placeholder="E.g. Alexander" required />
+                        </div>
+                        <span asp-validation-for="FirstName" class="error-text"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <div class="input-wrapper">
+                            <input asp-for="LastName" class="form-control" placeholder="E.g. Great" required />
+                        </div>
+                        <span asp-validation-for="LastName" class="error-text"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Institutional E-mail</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Identity Key" required />
+                    </div>
+                    <span asp-validation-for="Email" class="error-text"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Access Password</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" required />
+                    </div>
+                    <span asp-validation-for="Password" class="error-text"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Entry</label>
+                    <div class="input-wrapper">
+                        <input name="confirmPassword" type="password" class="form-control" placeholder="••••••••" required />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-royal">Apply for Entry</button>
+
+                <div class="utility-links">
+                    ALREADY AN INITIATE? <a asp-action="Login" asp-controller="Account">ENTER ARCHIVES</a>
+                </div>
+
+                <div class="divider">
+                    <span>OR REGISTER VIA</span>
+                </div>
+
+                <button type="button" class="google-btn">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="width: 18px;" alt="G">
+                    Google Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const card = document.querySelector('.login-card');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 60;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 60;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            card.style.boxShadow = `${xAxis * -1}px ${yAxis * -1}px 100px rgba(0,0,0,0.9), inset 0 0 40px rgba(212, 175, 55, 0.05)`;
+        });
+    </script>
+

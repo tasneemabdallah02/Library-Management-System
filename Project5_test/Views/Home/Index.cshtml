@@ -1,0 +1,428 @@
+﻿@model Project5_test.Models.User
+@{
+    Layout = "/Views/Shared/_Layoutupdated.cshtml";
+}
+    <title>Library Elite | Executive Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0c;
+            --accent-gold: #d4af37;
+            --accent-gold-low: rgba(212, 175, 55, 0.1);
+            --glass-card: rgba(255, 255, 255, 0.02);
+            --glass-stroke: rgba(255, 255, 255, 0.08);
+            --text-high: #f8f8f8;
+            --text-mid: #a0a0a5;
+            --dark-surface: #121215;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-high);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient Background Elements */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(212, 175, 55, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(212, 175, 55, 0.03) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Re-usable Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+            .reveal.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        /* Luxury Alert System */
+        .custom-alert-container {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 20000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .custom-alert {
+            background: rgba(15, 15, 18, 0.85);
+            border-left: 3px solid var(--accent-gold);
+            padding: 18px 30px;
+            backdrop-filter: blur(20px);
+            transform: translateX(100px);
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 4px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+            .custom-alert.show {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+        /* Hero Section Design */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8%;
+            position: relative;
+        }
+
+        .hero-content {
+            flex: 1.2;
+            z-index: 10;
+        }
+
+        .hero-pre-title {
+            font-family: 'Marcellus', serif;
+            color: var(--accent-gold);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+            .hero-main-title span {
+                font-style: italic;
+                color: var(--accent-gold);
+            }
+
+        .hero-description {
+            max-width: 450px;
+            color: var(--text-mid);
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 50px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .cta-prime {
+            padding: 18px 45px;
+            background: var(--accent-gold);
+            color: #000;
+            border: none;
+            font-family: 'Marcellus', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+            .cta-prime:hover {
+                background: #fff;
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3);
+            }
+
+        .hero-visual {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .accent-frame {
+            width: 380px;
+            height: 444px;
+            background: var(--dark-surface);
+            border: 1px solid var(--glass-stroke);
+            position: relative;
+            z-index: 1;
+            border-radius: 10px;
+        }
+
+        .floating-image {
+            position: absolute;
+            width: 550px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            filter: drop-shadow(20px 20px 40px rgba(0,0,0,0.6));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+
+            50% {
+                transform: translate(-50%, -60%);
+            }
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 150px 8%;
+            background: var(--dark-surface);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+            .section-header h2 {
+                font-family: 'Playfair Display', serif;
+                font-size: 3.5rem;
+                margin-bottom: 15px;
+            }
+
+            .section-header p {
+                color: var(--accent-gold);
+                font-family: 'Marcellus', serif;
+                letter-spacing: 5px;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+            }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .team-card {
+            background: var(--bg-base);
+            border: 1px solid var(--glass-stroke);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .team-card:hover {
+                border-color: var(--accent-gold);
+                transform: translateY(-15px);
+            }
+
+            .team-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                background: var(--accent-gold);
+                transform: scaleX(0);
+                transform-origin: left;
+                transition: transform 0.6s ease;
+            }
+
+            .team-card:hover::before {
+                transform: scaleX(1);
+            }
+
+        .member-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            object-fit: cover;
+            filter: grayscale(100%);
+            border: 1px solid var(--accent-gold);
+            padding: 5px;
+        }
+
+        .team-card:hover .member-img {
+            filter: grayscale(0%);
+        }
+
+        .member-info h4 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .member-info span {
+            color: var(--accent-gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .member-info p {
+            color: var(--text-mid);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        @@media (max-width: 900px) {
+            .hero-section {
+                flex-direction: column;
+                padding-top: 150px;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin: 0 auto 40px;
+            }
+
+            .cta-group {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                width: 100%;
+                margin-top: 80px;
+            }
+
+            .accent-frame {
+                width: 220px;
+                height: 300px;
+                margin: 0 auto;
+            }
+
+            .floating-image {
+                width: 280px;
+            }
+        }
+    </style>
+
+    <div class="ambient-glow"></div>
+    <div id="alertContainer" class="custom-alert-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-pre-title reveal">Private Invitation</span>
+            <h1 class="hero-main-title reveal">Elite <span>Reading</span> Hub</h1>
+            <p class="hero-description reveal">
+                Discover a world of curated literature in an environment crafted for absolute focus and intellectual elegance.
+            </p>
+            <div class="cta-group reveal">
+            <form asp-action="BooksList" asp-controller="Books">
+
+                <button class="cta-prime">Enter Library</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="hero-visual reveal">
+            <div class="accent-frame"></div>
+            <img src="~/Images/bookhome.png" alt="Luxury Book" class="floating-image">
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="section-header reveal">
+            <p>The Custodians</p>
+            <h2>Our Elite Team</h2>
+        </div>
+
+        <div class="team-grid">
+            <!-- Team Member 1 -->
+            <div class="team-card reveal">
+                <img src="~/Images/Team1.jpg" alt="Team Member" class="member-img">
+                <div class="member-info">
+                    <h4>Mony Vane</h4>
+                    <span>Maneger</span>
+                    <p>Expert in classical preservation and rare manuscript acquisition with 15 years of archival experience.</p>
+                </div>
+            </div>
+
+            <!-- Team Member 2 -->
+            <div class="team-card reveal">
+                <img src="~/Images/team2.jpg" alt="Team Member" class="member-img">
+                <div class="member-info">
+                    <h4>Elena Thorne</h4>
+                    <span>Assistant Librarian</span>
+                    <p>Connecting modern thinkers with historical wisdom through specialized reading circles and events.</p>
+                </div>
+            </div>
+
+            <!-- Team Member 3 -->
+            <div class="team-card reveal">
+                <img src="~/Images/team3.jpg" alt="Team Member" class="member-img">
+                <div class="member-info">
+                    <h4>Marcus Sterling</h4>
+                    <span>Circulation Desk Staff</span>
+                    <p>Ensuring the digital and physical integrity of our most precious intellectual assets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showAlert(message, isError = false) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = 'custom-alert';
+            alert.innerHTML = `
+                <div style="color:var(--accent-gold); font-size:1.2rem">${isError ? '✕' : '✧'}</div>
+                <div style="font-family:'Marcellus',serif; font-size:0.8rem; letter-spacing:1px; text-transform:uppercase;">${message}</div>
+            `;
+            container.appendChild(alert);
+            setTimeout(() => alert.classList.add('show'), 10);
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 600);
+            }, 4000);
+        }
+
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        window.onload = () => {
+            initScrollReveal();
+            // Trigger hero reveal immediately
+            setTimeout(() => {
+                document.querySelectorAll('.hero-section .reveal').forEach(el => el.classList.add('visible'));
+            }, 100);
+        };
+    </script>
+
+

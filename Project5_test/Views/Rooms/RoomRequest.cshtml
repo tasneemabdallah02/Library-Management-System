@@ -1,0 +1,32 @@
+﻿@* @model List<Project5_test.Models.Room>
+
+<h2>Available Rooms</h2>
+
+<div class="row">
+    @foreach (var room in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+
+                <div class="card-body">
+                    <h5 class="card-title">@room.RoomName</h5>
+                    <p class="card-text">@room.Capacity</p>
+
+                    @if (room.StatusId == 1)
+                    {
+                        <form asp-action="RoomRequest" asp-controller="Room" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="roomId" value="@room.RoomId" />
+                            <button type="submit" class="btn btn-success">Request</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Booked</span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div> *@

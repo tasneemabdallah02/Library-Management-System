@@ -1,0 +1,88 @@
+﻿@* @model List<Project5_test.Models.RoomReservation>
+
+<link rel="stylesheet" href="~/css/calendar.css" />
+
+@{
+    var today = DateTime.Now;
+    var firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
+    var daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
+    var startDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
+
+    string selectedDateStr = Context.Request.Query["date"];
+    DateOnly selectedDate = string.IsNullOrEmpty(selectedDateStr) ? DateOnly.FromDateTime(today) : DateOnly.Parse(selectedDateStr);
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div style="color: green; margin-bottom: 15px; padding: 10px; background-color: #e6ffe6; border: 1px solid green;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="calendar-container">
+
+    <div class="calendar-header">
+        <h2>@today.ToString("MMMM yyyy")</h2>
+    </div>
+
+    <div class="week-days">
+        <div>Sun</div><div>Mon</div><div>Tue</div>
+        <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+
+    <div class="calendar-grid">
+        @for (int i = 0; i < startDayOfWeek; i++)
+        {
+            <div></div>
+        }
+
+        @for (int day = 1; day <= daysInMonth; day++)
+        {
+            var currentDate = new DateTime(today.Year, today.Month, day);
+            var currentDtOnly = DateOnly.FromDateTime(currentDate);
+            var dateString = currentDtOnly.ToString("yyyy-MM-dd");
+
+            bool hasReservation = Model != null && Model
+            .Any(r => r.ReservationDate == currentDtOnly && r.StatusId == 2);
+            <!-- التعديل الأهم هنا: إضافة roomId للرابط عشان ما يضيع لما نكبس على يوم -->
+            <a href="?roomId=@ViewBag.RoomId&date=@dateString" class="day">
+                <div>@day</div>
+                @if (hasReservation)
+                {
+                    <div class="event-dot"></div>
+                }
+            </a>
+        }
+    </div>
+</div>
+
+<div class="booking-form" style="margin-top: 30px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <h3>Reserve Room</h3>
+
+    <form asp-action="Reserve" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="roomId" value="@ViewBag.RoomId" />
+
+        <div style="margin-bottom: 15px;">
+            <label>Selected Date</label><br />
+            <input type="date" name="reservationDate" value="@selectedDate.ToString("yyyy-MM-dd")" required style="width: 100%; padding: 8px;" />
+        </div>
+
+
+        <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; width: 100%;">
+            Send Reserve Request
+        </button>
+    </form>
+</div>
+
+
+<!-- هذا الكود يظهر الـ Alert عندما يتم الحفظ بنجاح (إذا اخترت البقاء في نفس الصفحة بدلاً من Redirect) -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        alert('@TempData["SuccessMessage"]');
+    </script>
+}
+
+          *@

@@ -1,0 +1,328 @@
+﻿@model List<Project5_test.Models.Feedback>
+@{
+    ViewData["Title"] = "Feedback Management";
+    Layout = "/Views/Shared/_LayoutDash.cshtml";
+}
+
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    :root {
+        --royal-black: #050505;
+        --deep-gray: #0f0f0f;
+        --gold-linear: linear-gradient(135deg, #d4af37 0%, #f3cf7a 100%);
+        --gold-glow: 0 0 15px rgba(212, 175, 55, 0.2);
+        --glass: rgba(255, 255, 255, 0.03);
+        --border-glass: rgba(255, 255, 255, 0.08);
+        --text-main: #f0f0f0;
+        --text-dim: #a0a0a0;
+        --transition-speed: 0.3s;
+    }
+
+    body {
+        background-color: var(--royal-black);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .feedback-page {
+        padding: 40px;
+        max-width: 1600px;
+        margin: 0 auto;
+        min-height: 100vh;
+    }
+
+    /* Header Styling */
+    .feedback-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+        .feedback-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: #d4af37;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+    .count-indicator {
+        background: var(--gold-linear);
+        color: #000;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        box-shadow: var(--gold-glow);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Table Card */
+    .feedback-card {
+        background: var(--deep-gray);
+        border-radius: 20px;
+        border: 1px solid var(--border-glass);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        overflow: hidden;
+        transition: all var(--transition-speed);
+    }
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .modern-table thead {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .modern-table th {
+            padding: 20px;
+            text-align: left;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .modern-table td {
+            padding: 20px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-glass);
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        .modern-table tbody tr {
+            transition: background var(--transition-speed);
+        }
+
+            .modern-table tbody tr:hover {
+                background: rgba(212, 175, 55, 0.03);
+            }
+
+    /* Custom Elements */
+    .user-info-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .avatar-circle {
+        width: 35px;
+        height: 35px;
+        background: var(--glass);
+        border: 1px solid #d4af37;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+        font-weight: bold;
+        font-size: 0.8rem;
+    }
+
+    .user-pill {
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #f3cf7a;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        border: 1px solid var(--border-glass);
+    }
+
+    .message-content {
+        max-width: 500px;
+        line-height: 1.6;
+        color: var(--text-main);
+        font-style: italic;
+        opacity: 0.9;
+    }
+
+    .timestamp {
+        color: var(--text-dim);
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .empty-state {
+        padding: 80px 20px;
+        text-align: center;
+    }
+
+        .empty-state i {
+            font-size: 4rem;
+            background: var(--gold-linear);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+    /* Search Bar */
+    .search-section {
+        margin-bottom: 25px;
+        position: relative;
+        max-width: 400px;
+    }
+
+        .search-section input {
+            width: 100%;
+            background: var(--deep-gray);
+            border: 1px solid var(--border-glass);
+            padding: 12px 15px 12px 45px;
+            border-radius: 12px;
+            color: white;
+            transition: 0.3s;
+        }
+
+            .search-section input:focus {
+                outline: none;
+                border-color: #d4af37;
+                box-shadow: var(--gold-glow);
+            }
+
+        .search-section i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    @@media (max-width: 768px) {
+        .message-content {
+            max-width: 200px;
+        }
+
+        .feedback-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+    }
+</style>
+
+<div class="feedback-page">
+
+    <div class="feedback-header">
+        <div>
+            <h2>Feedbacks <span style="color: var(--text-main); font-weight: 300;">Archive</span></h2>
+            <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 5px;">Manage and review all client impressions</p>
+        </div>
+        <div class="count-indicator">
+            <i class="fas fa-comment-alt"></i>
+            <span>@(Model?.Count ?? 0) Total Entries</span>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <i class="fas fa-search"></i>
+        <input type="text" id="feedbackSearch" placeholder="Filter by user or message...">
+    </div>
+
+    <div class="feedback-card fade-in">
+        <div class="table-container">
+            <table class="modern-table" id="feedbackTable">
+                <thead>
+                    <tr>
+                        <th>User Account</th>
+                        <th>User Name</th>
+                        <th>Impression / Message</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr class="searchable-row">
+                                <td>
+                                    <span class="user-pill">@(item.User?.Email ?? "Anonymous")</span>
+                                </td>
+                                <td>
+                                    <div class="user-info-box">
+                                        <div class="avatar-circle">
+                                            @(item.User?.FirstName?.Substring(0, 1).ToUpper() ?? "U")
+                                        </div>
+                                        <span style="font-weight: 600;">@(item.User?.FirstName ?? "Guest") @item.User?.LastName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="message-content">
+                                        <i class="fas fa-quote-left" style="color: #d4af37; font-size: 0.7rem; margin-right: 5px;"></i>
+                                        @item.Message
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="timestamp">
+                                        <i class="far fa-calendar-alt" style="color: #d4af37"></i>
+                                        @item.Date?.ToString("dd MMM yyyy, HH:mm")
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="fas fa-comment-slash"></i>
+                                    <h4 style="font-family: 'Playfair Display', serif; color: #d4af37;">No Data Found</h4>
+                                    <p style="color: var(--text-dim);">Client reviews will be displayed here once received.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Real-time search filter
+    document.getElementById('feedbackSearch').addEventListener('keyup', function() {
+        let val = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.searchable-row');
+
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(val) ? '' : 'none';
+        });
+    });
+</script>

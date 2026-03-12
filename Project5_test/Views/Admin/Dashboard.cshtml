@@ -1,0 +1,399 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "/Views/Shared/_LayoutDash.cshtml";
+}
+
+<!-- Google Fonts & Font Awesome -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    :root {
+        --dark-bg: #0a0a0a;
+        --card-bg: #141414;
+        --gold-primary: #d4af37;
+        --gold-secondary: #f3cf7a;
+        --gold-glow: rgba(212, 175, 55, 0.3);
+        --text-muted: #888;
+        --text-light: #e0e0e0;
+        --border-color: #2a2a2a;
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+    }
+
+    .dashboard-grid {
+        padding: 20px;
+    }
+
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 15px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .stat-card.glow:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 10px 30px var(--gold-glow);
+        }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(212, 175, 55, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        font-size: 1.5rem;
+        color: var(--gold-primary);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .stat-details h3 {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .stat-details .counter {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 5px 0;
+        color: #fff;
+    }
+
+    .content-section {
+        display: none;
+        animation: fadeIn 0.5s ease;
+        padding: 20px;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section-header {
+        margin-bottom: 30px;
+        border-left: 4px solid var(--gold-primary);
+        padding-left: 15px;
+    }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin: 0;
+            color: var(--gold-primary);
+        }
+
+    /* Analytics Charts Styling */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+
+    .chart-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 15px;
+        padding: 20px;
+        position: relative;
+    }
+
+        .chart-card h3 {
+            color: var(--gold-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .messages-container {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid var(--border-color);
+    }
+
+    .message-item {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+        .message-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+        }
+
+    .settings-card {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px solid var(--border-color);
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #333;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: var(--gold-primary);
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+</style>
+
+<div class="dashboard-wrapper">
+    <!-- Main Dashboard -->
+    <div id="dashboard-content" class="content-section active">
+        <div class="dashboard-grid">
+            <!-- Stats -->
+            <div class="stats-container">
+                <div class="stat-card glow">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <a asp-action="UsersList">
+                    <div class="stat-details">
+                        <h3>Total Users</h3>
+                        <p class="counter" data-target="@ViewBag.UsersCount">@ViewBag.UsersCount</p>
+                        <span class="trend">System Growth</span>
+                    </div></a>
+                </div>
+
+
+                <div class="stat-card glow">
+                    <div class="stat-icon"><i class="fas fa-book"></i></div>
+                    <a asp-action="BooksList">
+                    <div class="stat-details">
+                        <h3>Total Books</h3>
+                        <p class="counter" data-target="@ViewBag.BooksCount">@ViewBag.BooksCount</p>
+                        <span class="trend">Inventory</span>
+                    </div></a>
+                </div>
+
+                <div class="stat-card glow">
+                    <div class="stat-icon"><i class="fas fa-hand-holding"></i></div>
+                    <a asp-action="ManageBorrows">
+                    <div class="stat-details">
+                        <h3>Borrows Pending</h3>
+                        <p class="counter" data-target="@ViewBag.PendingBorrows">@ViewBag.PendingBorrows</p>
+                        <span class="trend">Pending Approval</span>
+                    </div></a>
+                </div>
+
+                <div class="stat-card glow">
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <a asp-action="ManageReservations">
+                    <div class="stat-details">
+                        <h3>Reservations</h3>
+                        <p class="counter" data-target="@ViewBag.PendingReservation">@ViewBag.PendingReservation</p>
+                        <span class="trend">Active Requests</span>
+                    </div></a>
+                </div>
+            </div>
+
+            <!-- Charts Section (New Addition) -->
+            <div class="section-header">
+                <h2>Data Visualization</h2>
+                <p>Real-time analytics and system performance</p>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-line"></i> User Growth & Activity</h3>
+                    <canvas id="userGrowthChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-pie"></i> Library Distribution</h3>
+                    <canvas id="libraryDistChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Section -->
+    <div id="analytics-content" class="content-section">
+        <div class="section-header">
+            <h2>Detailed Analytics</h2>
+            <p>Full breakdown of your platform data</p>
+        </div>
+        <div class="chart-card">
+            <canvas id="detailedMonthlyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Messages / Feedback -->
+    <div id="messages-content" class="content-section">
+        <div class="section-header">
+            <h2>Messages & Feedback</h2>
+        </div>
+        <div class="messages-container">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="message-item">
+                        <img src="https://ui-avatars.com/api/?name=@(item.User?.FirstName ?? "A")&background=d4af37&color=fff" alt="User">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <h4>@(item.User?.FirstName ?? "Anonymous")</h4>
+                                <span>@item.DateCreated?.ToString("MMM dd")</span>
+                            </div>
+                            <p>@item.Message</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-center py-5">No messages found.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- Counter Animation ---
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target') || 0;
+            const updateCount = () => {
+                const current = +counter.innerText;
+                const increment = target / 30;
+                if (current < target) {
+                    counter.innerText = Math.ceil(current + increment);
+                    setTimeout(updateCount, 30);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCount();
+        });
+
+        // --- Charts Initialization ---
+
+        // 1. User Growth Chart (Line Chart)
+        const ctxGrowth = document.getElementById('userGrowthChart').getContext('2d');
+        new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'New Users',
+                    data: [12, 19, 15, 25, 22, 30],
+                    borderColor: '#d4af37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#888' } } },
+                scales: {
+                    y: { grid: { color: '#2a2a2a' }, ticks: { color: '#888' } },
+                    x: { grid: { color: '#2a2a2a' }, ticks: { color: '#888' } }
+                }
+            }
+        });
+
+        // 2. Library Distribution (Doughnut Chart)
+        const ctxDist = document.getElementById('libraryDistChart').getContext('2d');
+        new Chart(ctxDist, {
+            type: 'doughnut',
+            data: {
+                labels: ['Available', 'Borrowed', 'Reserved'],
+                datasets: [{
+                    data: [@ViewBag.BooksCount, @ViewBag.PendingBorrows, @ViewBag.PendingReservation],
+                    backgroundColor: ['#d4af37', '#f3cf7a', '#2a2a2a'],
+                    borderColor: '#141414',
+                    borderWidth: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: '#e0e0e0', padding: 20 } } }
+            }
+        });
+    });
+
+    function showSection(sectionId) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    }
+</script>

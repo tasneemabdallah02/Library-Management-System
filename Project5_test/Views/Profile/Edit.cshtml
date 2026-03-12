@@ -1,0 +1,317 @@
+﻿@model Project5_test.Models.User
+@{
+    Layout = "~/Views/Shared/_Layoutupdated.cshtml";
+}
+<style>
+    :root {
+        --local-tan-bg: #040404;
+        --local-button-bg: #f3ae09;
+        --local-text-gold: #CCAF74;
+        --glass-border: rgba(204, 175, 116, 0.2);
+        --input-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--local-tan-bg);
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    .page-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+        box-sizing: border-box;
+        background: radial-gradient(circle at top right, rgba(243, 174, 9, 0.05), transparent 400px), radial-gradient(circle at bottom left, rgba(204, 175, 116, 0.05), transparent 400px);
+    }
+
+    .edit-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        border-radius: 30px;
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .edit-card h2 {
+        text-align: center;
+        margin: 0 0 35px 0;
+        color: var(--local-text-gold);
+        font-family: 'Playfair Display', serif;
+        font-weight: 500;
+        font-style: italic;
+        font-size: 2rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Profile Image Section */
+    .profile-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .avatar-container {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        margin-bottom: 15px;
+    }
+
+    .avatar-preview {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--local-text-gold);
+        padding: 3px;
+        background: var(--input-bg);
+        transition: transform 0.3s ease;
+    }
+
+    .upload-badge {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: var(--local-button-bg);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-size: 0.8rem;
+        cursor: pointer;
+        border: 3px solid var(--local-tan-bg);
+        transition: all 0.3s ease;
+    }
+
+        .upload-badge:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+    /* Form Layout */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            color: var(--local-text-gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--local-text-gold);
+            opacity: 0.5;
+            font-size: 0.85rem;
+        }
+
+    .form-control {
+        width: 100%;
+        background: var(--input-bg);
+        border: 1px solid rgba(204, 175, 116, 0.2);
+        border-radius: 12px;
+        padding: 12px 15px 12px 40px;
+        color: #fff;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--local-button-bg);
+            background: rgba(204, 175, 116, 0.05);
+            box-shadow: 0 0 15px rgba(243, 174, 9, 0.1);
+        }
+
+        .form-control[readonly] {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+    /* Buttons */
+    .button-group {
+        margin-top: 30px;
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 14px 25px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none;
+        text-align: center;
+        border: none;
+    }
+
+    .btn-primary {
+        flex: 2;
+        background: var(--local-button-bg);
+        color: #000;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(243, 174, 9, 0.3);
+        }
+
+    .btn-outline {
+        flex: 1;
+        background: transparent;
+        color: var(--local-text-gold);
+        border: 1px solid var(--glass-border);
+    }
+
+        .btn-outline:hover {
+            background: rgba(204, 175, 116, 0.1);
+            color: #fff;
+        }
+
+    @@media (max-width: 480px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .full-width {
+            grid-column: span 1;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+    <div class="page-content">
+        <div class="edit-card">
+            <h2>Edit Profile</h2>
+
+        <form asp-action="Edit" asp-controller="Profile" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UserId" />                
+                <div class="profile-section">
+                    <div class="avatar-container">
+                        <img id="imgPreview" src="@Model.ProfilePicture" class="avatar-preview" alt="User Avatar">
+                        <label for="fileUpload" class="upload-badge">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                    <input type="file" id="fileUpload" name="ProfilePicture" hidden accept="image/*" onchange="previewImage(this)">
+                    </div>
+                    <span style="font-size: 0.7rem; color: var(--local-text-gold); opacity: 0.6;">JPG, PNG or GIF (Max 2MB)</span>
+                </div>
+
+                <div class="form-grid">
+                    <!-- First Name -->
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user-circle"></i>
+                        <input type="text" asp-for="FirstName" class="form-control" value="@Model.FirstName">
+                        </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user-circle"></i>
+                        <input type="text" asp-for="LastName" class="form-control" value="@Model.LastName">
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group full-width">
+                        <label>Email Address</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                        <input type="email" asp-for="Email" class="form-control" value="@Model.Email" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group full-width">
+                        <label>Phone Number</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone-alt"></i>
+                        <input type="tel" asp-for="Phone" class="form-control" value="@Model.Phone">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-outline" >Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imgPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>

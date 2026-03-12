@@ -1,0 +1,245 @@
+﻿@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Book Website</title>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --tan-bg: #e1cfc1;
+            --button-bg: #bba496;
+            --text-dark: #333;
+            --text-white: #fdfdfd;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- NAVBAR STYLES --- */
+        .navbar {
+            background-color: var(--tan-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 80px;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3rem;
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+            .nav-links li a {
+                text-decoration: none;
+                color: var(--text-dark);
+                font-size: 1.1rem;
+                font-weight: 400;
+            }
+
+        .login-btn {
+            background-color: var(--button-bg);
+            border: none;
+            padding: 10px 35px;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /* --- FOOTER STYLES --- */
+        .main-footer {
+            background-color: var(--tan-bg);
+            padding: 40px 80px 10px 80px;
+            margin-top: auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .footer-col {
+            flex: 1;
+        }
+
+            .footer-col ul {
+                list-style: none;
+            }
+
+                .footer-col ul li a {
+                    text-decoration: none;
+                    color: var(--text-white);
+                    font-family: 'Playfair Display', serif;
+                    font-size: 1.1rem;
+                    line-height: 2;
+                }
+
+        .footer-center {
+            text-align: center;
+            flex: 2; /* Center column is wider */
+        }
+
+        .footer-logo {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 4rem;
+            color: var(--text-white);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .footer-desc {
+            color: var(--text-white);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        /* Footer Bottom Strip */
+        .footer-bottom {
+            border-top: 1px solid rgba(0,0,0,0.15);
+            padding-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .copyright {
+            color: var(--text-white);
+            font-size: 0.8rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        .social-icons {
+            position: absolute;
+            right: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+            .social-icons a {
+                color: var(--text-white);
+                font-size: 1.1rem;
+                text-decoration: none;
+            }
+
+        /* Responsive adjustments */
+        @@media (max-width:768px) {
+            .navbar, .footer-top, .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .social-icons {
+                position: static;
+                margin-top: 10px;
+            }
+
+            .nav-links {
+                display: none; /* Hide nav on mobile for this example */
+            }
+        }
+    </style>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">Book</div>
+        <nav>
+            <ul class="nav-links">
+                <li>
+                    <a asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li>
+                    <a asp-controller="Profile" asp-action="Index">Profile</a>
+                </li>
+                <li>
+                    <a asp-controller="Books" asp-action="BooksList">Categories</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Contact">Contact</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="About">Ses</a>
+                </li>
+                <li>
+                    <a asp-controller="Account" asp-action="Login" class="login-btn">
+                        Login
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main content injected here -->
+    <main style="min-height: 900px;">
+        @RenderBody();
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="footer-col">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="About" asp-action="Index">About</a></li>
+                    <li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col footer-center">
+                <div class="footer-logo">Book</div>
+                <p class="footer-desc">
+                    Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit. Quisque Non Sodales Nibh. Proin Metus Dolor.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <ul>
+                    <li><a asp-controller="Services" asp-action="Index">Services</a></li>
+                    <li><a asp-controller="Authors" asp-action="Index">Authors</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2026 All Rights Reserved - My Website
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fas fa-phone"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html> *@

@@ -1,0 +1,349 @@
+﻿
+@model List<Project5_test.Models.Borrowing>
+@{
+    ViewData["Title"] = "Borrowing Management";
+    Layout = "/Views/Shared/_LayoutDash.cshtml";
+}
+
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    :root {
+        --royal-black: #050505;
+        --deep-gray: #0f0f0f;
+        --gold-linear: linear-gradient(135deg, #d4af37 0%, #f3cf7a 100%);
+        --gold-glow: 0 0 15px rgba(212, 175, 55, 0.2);
+        --glass: rgba(255, 255, 255, 0.03);
+        --border-glass: rgba(255, 255, 255, 0.08);
+        --text-main: #f0f0f0;
+        --text-dim: #a0a0a0;
+        /* Status Colors */
+        --color-pending: #f3cf7a; /* Goldish */
+        --color-approved: #2ed573; /* Green */
+        --color-rejected: #ff4757; /* Red */
+        --color-returned: #4361ee; /* Blue */
+    }
+
+    body {
+        background-color: var(--royal-black);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .borrow-page {
+        padding: 40px;
+        max-width: 1600px;
+        margin: 0 auto;
+        min-height: 100vh;
+    }
+
+    /* Header Styling */
+    .borrow-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+        .borrow-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: #d4af37;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+    .count-indicator {
+        background: var(--gold-linear);
+        color: #000;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        box-shadow: var(--gold-glow);
+    }
+
+    /* Table Card */
+    .borrow-card {
+        background: var(--deep-gray);
+        border-radius: 20px;
+        border: 1px solid var(--border-glass);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        overflow: hidden;
+    }
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .modern-table th {
+            padding: 20px;
+            text-align: left;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: rgba(255, 255, 255, 0.01);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .modern-table td {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-glass);
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        .modern-table tbody tr:hover {
+            background: rgba(212, 175, 55, 0.02);
+        }
+
+    /* User Avatar & Info */
+    .user-info-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        background: var(--gold-linear);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-weight: 700;
+        font-size: 0.8rem;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+        border: 1px solid transparent;
+    }
+
+    .status-pending {
+        background: rgba(243, 207, 122, 0.1);
+        color: var(--color-pending);
+        border-color: rgba(243, 207, 122, 0.2);
+    }
+
+    .status-approved {
+        background: rgba(46, 213, 115, 0.1);
+        color: var(--color-approved);
+        border-color: rgba(46, 213, 115, 0.2);
+    }
+
+    .status-rejected {
+        background: rgba(255, 71, 87, 0.1);
+        color: var(--color-rejected);
+        border-color: rgba(255, 71, 87, 0.2);
+    }
+
+    .status-returned {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--color-returned);
+        border-color: rgba(67, 97, 238, 0.2);
+    }
+
+    /* Action Buttons */
+    .action-btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-gold {
+        background: var(--gold-linear);
+        color: #000;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-outline-gold {
+        background: transparent;
+        border: 1px solid #d4af37;
+        color: #d4af37;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-outline-red {
+        background: transparent;
+        border: 1px solid var(--color-rejected);
+        color: var(--color-rejected);
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        cursor: pointer;
+    }
+
+    .btn-gold:hover, .btn-outline-gold:hover {
+        box-shadow: var(--gold-glow);
+        transform: translateY(-2px);
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        color: var(--text-dim);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease forwards;
+    }
+</style>
+
+<div class="borrow-page">
+    <div class="borrow-header">
+        <div>
+            <h2>Borrowing <span style="color: var(--text-main); font-weight: 300;">Console</span></h2>
+            <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 5px;">Track and approve book borrowing requests</p>
+        </div>
+        <div class="count-indicator">
+            <i class="fas fa-book-reader mr-2"></i> @(Model?.Count ?? 0) Active Records
+        </div>
+    </div>
+
+    <div class="borrow-card fade-in">
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Member</th>
+                        <th>Book Title</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Management Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var borrow in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="user-info-box">
+                                        <div class="user-avatar">
+                                            @borrow.User.FirstName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600;">@borrow.User.FirstName</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-dim);">@borrow.User.Email</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 500; color: #f3cf7a;">@borrow.Book.BookName</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-dim);">Category: @(borrow.Book.Category?.CategoryName ?? "General")</div>
+                                </td>
+                                <td>
+                                    <div class="info-label">
+                                        <i class="far fa-calendar-alt"></i>
+                                        @borrow.BorrowDate?.ToString("MMM dd, yyyy")
+                                    </div>
+                                </td>
+                                <td>
+                                    @{
+                                        var statusClass = "status-pending";
+                                        if (borrow.StatusId == 2) statusClass = "status-approved";
+                                        else if (borrow.StatusId == 3) statusClass = "status-rejected";
+                                        else if (borrow.StatusId == 4) statusClass = "status-returned";
+                                    }
+                                    <span class="status-badge @statusClass">
+                                        @borrow.Status.StatusName
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-btns">
+                                        @if (borrow.StatusId == 1) // Pending
+                                        {
+                                            <form asp-action="ConfirmBorrow" asp-controller="Admin" method="post">
+                                                <input type="hidden" name="borrowId" value="@borrow.BorrowId" />
+                                                <button type="submit" class="btn-gold">
+                                                    <i class="fas fa-check mr-1"></i> Approve
+                                                </button>
+                                            </form>
+
+                                            <form asp-action="RejectBorrow" asp-controller="Admin" method="post">
+                                                <input type="hidden" name="borrowId" value="@borrow.BorrowId" />
+                                                <button type="submit" class="btn-outline-red">
+                                                    <i class="fas fa-times mr-1"></i> Reject
+                                                </button>
+                                            </form>
+                                        }
+                                        else if (borrow.StatusId == 2) // Approved (Can be returned)
+                                        {
+                                            <form asp-action="ReturnBorrow" asp-controller="Admin" method="post">
+                                                <input type="hidden" name="borrowId" value="@borrow.BorrowId" />
+                                                <button type="submit" class="btn-outline-gold">
+                                                    <i class="fas fa-undo mr-1"></i> Mark as Returned
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="info-label" style="opacity: 0.5;">
+                                                <i class="fas fa-lock"></i> No actions
+                                            </span>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">
+                                <div style="padding: 80px; text-align: center;">
+                                    <i class="fas fa-inbox fa-3x mb-3" style="color: var(--border-glass)"></i>
+                                    <h4 style="color: var(--text-dim); font-family: 'Playfair Display', serif;">No Borrow Records</h4>
+                                    <p style="color: rgba(255,255,255,0.2); font-size: 0.8rem;">Requests from members will appear here.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

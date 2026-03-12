@@ -1,0 +1,88 @@
+﻿@* @model List<Project5_test.Models.RoomReservation>
+
+<link rel="stylesheet" href="~/css/calendar.css" />
+
+@{
+    var today = DateTime.Now;
+    var firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
+    var daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
+    var startDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
+
+    // تعديل: استخدام DateOnly لالتقاط التاريخ من الرابط
+    string selectedDateStr = Context.Request.Query["date"];
+    DateOnly selectedDate = string.IsNullOrEmpty(selectedDateStr) ? DateOnly.FromDateTime(today) : DateOnly.Parse(selectedDateStr);
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div style="color: green; margin-bottom: 15px; padding: 10px; background-color: #e6ffe6; border: 1px solid green;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="calendar-container">
+
+    <div class="calendar-header">
+        <h2>@today.ToString("MMMM yyyy")</h2>
+    </div>
+
+    <div class="week-days">
+        <div>Sun</div><div>Mon</div><div>Tue</div>
+        <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+
+    <div class="calendar-grid">
+        @for (int i = 0; i < startDayOfWeek; i++)
+        {
+            <div></div>
+        }
+
+        @for (int day = 1; day <= daysInMonth; day++)
+        {
+            var currentDate = new DateTime(today.Year, today.Month, day);
+            // تعديل: تحويل الـ DateTime إلى DateOnly لتتطابق مع قاعدة البيانات
+            var currentDtOnly = DateOnly.FromDateTime(currentDate);
+            var dateString = currentDtOnly.ToString("yyyy-MM-dd");
+
+            // تعديل: المقارنة باستخدام DateOnly
+            bool hasReservation = Model.Any(r => r.ReservationDate == currentDtOnly);
+
+            <a href="?date=@dateString" class="day" style="text-decoration: none; color: inherit; display: block;">
+                <div>@day</div>
+                @if (hasReservation)
+                {
+                    <div class="event-dot"></div>
+                }
+            </a>
+        }
+    </div>
+</div>
+
+<div class="booking-form" style="margin-top: 30px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <h3>Reserve Room</h3>
+
+    <form asp-action="Reserve" asp-controller="Rooms" method="post">
+
+        <input type="hidden" name="roomId" value="1" />
+
+        <div style="margin-bottom: 10px;">
+            <label>Selected Date</label><br />
+            <!-- تعديل: تحويل selectedDate إلى نص يتناسب مع حقل التاريخ -->
+            <input type="date" name="reservationDate" value="@selectedDate.ToString("yyyy-MM-dd")" required style="width: 100%; padding: 5px;" />
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <label>Start Time</label><br />
+            <input type="time" name="startTime" required style="width: 100%; padding: 5px;" />
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <label>End Time</label><br />
+            <input type="time" name="endTime" required style="width: 100%; padding: 5px;" />
+        </div>
+
+        <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+            Send Reserve Request
+        </button>
+    </form>
+</div> *@

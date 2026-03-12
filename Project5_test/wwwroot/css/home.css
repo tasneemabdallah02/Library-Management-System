@@ -1,0 +1,91 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* header */
+.header {
+    height: 50px;
+    background: rgba(214,188,173,0.82);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.logo {
+    font-size: 60px;
+    font-family: 'Kapakana', cursive;
+    cursor: pointer;
+}
+
+.nav {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.login {
+    background: #847C7C;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 46px;
+    cursor: pointer;
+}
+
+/* main */
+.home {
+    display: flex;
+    height: calc(100vh - 84px);
+}
+
+.left {
+    width: 50%;
+    padding: 120px 60px;
+}
+
+#title {
+    font-size: 70px;
+    font-family: 'Kapakana', cursive;
+    margin-bottom: 20px;
+}
+
+.left p {
+    width: 70%;
+    font-family: 'Kaisei Tokumin';
+    margin-bottom: 40px;
+}
+
+.read {
+    background: #A57865;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* right side */
+.right {
+    width: 50%;
+    background: #E3D1C3;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box {
+    position: absolute;
+    width: 480px;
+    height: 400px;
+    background: #E7CDBE;
+    border-radius: 20px;
+}
+
+.book-img {
+    position: relative;
+    width: 400px;
+    transform: rotate(35deg);
+}

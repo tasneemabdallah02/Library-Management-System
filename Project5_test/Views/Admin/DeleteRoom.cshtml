@@ -1,0 +1,23 @@
+﻿@model Project5_test.Models.Room
+<h2>Confirm Delete Room</h2>
+
+<p>Are you sure you want to delete the book: <strong>@Model.RoomName</strong> by @Model.RoomId?</p>
+
+<form asp-action="DeleteBookConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.RoomId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="BooksList" class="btn btn-secondary">Cancel</a>
+</form>}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        alert('@TempData["SuccessMessage"]');
+    </script>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        alert('@TempData["ErrorMessage"]');
+    </script>
+}

@@ -1,0 +1,243 @@
+﻿
+@model List<Project5_test.Models.Feedback>
+@{
+    ViewData["Title"] = "About";
+    Layout = "~/Views/Shared/_Layoutupdated.cshtml";
+}
+
+<style>
+    .page-content {
+        background-color: #0c0c0c;
+    }
+    .about-container {
+        background-color: #0c0c0c;
+        display: flex;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        align-items: center;
+        gap: 60px;
+        padding: 60px 40px;
+        min-height: calc(100vh - 80px);
+    }
+
+    /* النص */
+    .content {
+        flex: 1;
+        text-align: left;
+    }
+
+    .main-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-style: italic;
+        color: #E7BF6A;
+        margin: 0;
+        font-weight: 400;
+        line-height: 1.1;
+    }
+
+    .title-container {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 25px;
+    }
+
+    .circle-sketch {
+        position: absolute;
+        left: -15px;
+        top: -5px;
+        width: 160px;
+        height: 70px;
+        border: 1.5px solid #E0AA3E;
+        border-radius: 50% 45% 55% 48% / 45% 55% 45% 55%;
+        transform: rotate(-3deg);
+    }
+
+    .description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #CCAF74;
+        max-width: 450px;
+    }
+
+    /* الفيديو */
+    .image-section {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .arch-media {
+        width: 100%;
+        max-width: 400px;
+        height: 550px;
+        border-radius: 200px 200px 0 0;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    /* --- تنسيق قسم الفيدباك الجديد --- */
+    .feedback-section {
+        max-width: 1200px;
+        margin: 0 auto 80px auto;
+        padding: 0 40px;
+    }
+
+    .feedback-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .feedback-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #CCAF74;
+            font-weight: 400;
+        }
+
+    .feedback-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .feedback-card {
+        background: #2D2D2D;
+        padding: 40px 30px;
+        border: 2px solid #CCAF74;
+        border-radius: 0; /* متناسق مع الاستايل الهندسي */
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+        .feedback-card:hover {
+            transform: translateY(-5px);
+            border-color: #CCAF74;
+        }
+
+        .feedback-card i.quote-icon {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: #CCAF74;
+            opacity: 0.1;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            line-height: 1;
+        }
+
+        .feedback-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #CCAF74;
+            font-style: italic;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+    .user-info {
+        border-top: 1px solid #CCAF74;
+        padding-top: 15px;
+    }
+
+        .user-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #CCAF74;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .user-info small {
+            color: #CCAF74;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+    .no-feedback {
+        text-align: center;
+        color: #CCAF74;
+        font-style: italic;
+        padding: 40px;
+    }
+
+    /* موبايل */
+    @@media (max-width: 768px) {
+        .about-container {
+            flex-direction: column-reverse;
+            text-align: center;
+            gap: 30px;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+        }
+
+        .arch-media {
+            height: 400px;
+        }
+
+        .feedback-header h2 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="about-container">
+    <div class="content">
+        <div class="title-container">
+            <div class="circle-sketch"></div>
+            <h1 class="main-title">About Our Library</h1>
+        </div>
+
+        <p class="description">
+            Recent uni grad. I am passionate about brand design, illustration, and print design.
+            My goal is to make my mark in digital media and tech spaces.
+            I would love to work with people and companies who will give me
+            an opportunity to flex my sleek and polished style.
+            Reach out if you think we can create impactful visual art together.
+        </p>
+    </div>
+
+    <div class="image-section">
+        <video class="arch-media" autoplay muted loop playsinline>
+            <source src="~/Images/video.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<section class="feedback-section">
+    <div class="feedback-header">
+        <h2>What Our Users Say</h2>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="feedback-grid">
+            @foreach (var item in Model.Take(3))
+            {
+                <div class="feedback-card">
+                    <span class="quote-icon">“</span>
+                    <p>@item.Message</p>
+                    <div class="user-info">
+                        <h4>@(item.User?.FirstName ?? "Anonymous")</h4>
+                        <small>@item.DateCreated?.ToString("MMMM dd, yyyy")</small>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="no-feedback">No feedback available yet. Be the first to share your thoughts!</p>
+    }
+</section>

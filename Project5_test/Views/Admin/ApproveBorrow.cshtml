@@ -1,0 +1,274 @@
+﻿
+@model List<Project5_test.Models.Borrowing>
+@{
+    Layout = "/Views/Shared/_LayoutDash.cshtml";
+}
+
+<style>
+    /* الحاوية الرئيسية */
+    .borrow-page {
+        padding: 2rem;
+        min-height: 100vh;
+        background-color: var(--bg-primary);
+        transition: background-color var(--transition-speed);
+    }
+
+    /* رأس الصفحة */
+    .borrow-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+        .borrow-header h2 {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+    .count-indicator {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        box-shadow: var(--neon-glow);
+    }
+
+    /* بطاقة الجدول */
+    .borrow-card {
+        background-color: var(--bg-secondary);
+        border-radius: 16px;
+        border: 1px solid var(--bg-tertiary);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        transition: all var(--transition-speed);
+    }
+
+    /* تنسيق الجدول */
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+        .modern-table thead {
+            background-color: var(--bg-tertiary);
+        }
+
+        .modern-table th {
+            padding: 1.25rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .modern-table td {
+            padding: 1.25rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--bg-tertiary);
+            vertical-align: middle;
+        }
+
+        .modern-table tbody tr {
+            transition: background-color var(--transition-speed);
+        }
+
+            .modern-table tbody tr:hover {
+                background-color: rgba(109, 90, 205, 0.05);
+            }
+
+    /* عناصر مخصصة */
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        background: var(--gradient-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.8rem;
+    }
+
+    .status-badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-pending {
+        background: rgba(255, 165, 2, 0.15);
+        color: var(--warning);
+        border: 1px solid var(--warning);
+    }
+
+    .status-approved {
+        background: rgba(46, 213, 115, 0.15);
+        color: var(--success);
+        border: 1px solid var(--success);
+    }
+
+    .status-rejected {
+        background: rgba(255, 71, 87, 0.15);
+        color: var(--danger);
+        border: 1px solid var(--danger);
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.8rem;
+    }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+    .btn-approve {
+        background-color: var(--success);
+        color: white;
+    }
+
+    .btn-reject {
+        background-color: var(--danger);
+        color: white;
+    }
+
+    .na-text {
+        color: var(--text-secondary);
+        font-style: italic;
+        font-size: 0.8rem;
+    }
+
+    /* تحسين للهواتف */
+    @@media (max-width: 768px) {
+        .borrow-page {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<div class="borrow-page">
+    <div class="borrow-header">
+        <h2>Borrow <span style="color: var(--accent-primary)">Requests</span></h2>
+        <div class="count-indicator">
+            <i class="fas fa-book-reader mr-2"></i> @(Model?.Count ?? 0) Active Requests
+        </div>
+    </div>
+
+    <div class="borrow-card">
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Book Title</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var borrow in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">@borrow.User.FirstName.Substring(0, 1)</div>
+                                        <span>@borrow.User.FirstName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--accent-secondary)">@borrow.Book.BookName</div>
+                                </td>
+                                <td>
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <i class="far fa-calendar-alt mr-1"></i>
+                                        @borrow.BorrowDate?.ToString("yyyy-MM-dd")
+                                    </div>
+                                </td>
+                                <td>
+                                    @{
+                                        var statusClass = borrow.StatusId == 1 ? "status-pending" : (borrow.StatusId == 2 ? "status-approved" : "status-rejected");
+                                    }
+                                    <span class="status-badge @statusClass">
+                                        @borrow.Status.StatusName
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (borrow.StatusId == 1)
+                                    {
+                                        <div class="action-btns">
+                                            <form asp-action="ApproveBorrow" asp-controller="Admin" method="post">
+                                                <input type="hidden" name="id" value="@borrow.BookId" />
+                                                <button type="submit" class="btn-action btn-approve">
+                                                    <i class="fas fa-check"></i> Approve
+                                                </button>
+                                            </form>
+                                            <form asp-action="RejectBorrow" asp-controller="Admin" method="post">
+                                                <input type="hidden" name="id" value="@borrow.BookId" />
+                                                <button type="submit" class="btn-action btn-reject">
+                                                    <i class="fas fa-times"></i> Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="na-text">No actions available</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">
+                                <div style="padding: 4rem; text-align: center; color: var(--text-secondary);">
+                                    <i class="fas fa-inbox fa-3x mb-3" style="color: var(--bg-tertiary)"></i>
+                                    <p>No borrow requests found at the moment.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

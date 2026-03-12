@@ -1,0 +1,30 @@
+﻿@* @model IEnumerable<Project5_test.Models.Room>
+
+<div class="container">
+    <h3>Test: Reserve a Room</h3>
+    <div class="row">
+        @foreach (var room in Model)
+        {
+            <div class="col-md-4 card p-3 m-2">
+                <h5>@room.RoomName</h5>
+                <p>Capacity: @room.Capacity persons</p>
+
+                <form asp-controller="Room" asp-action="Reserve" method="post">
+                    <input type="hidden" name="roomId" value="@room.RoomId" />
+
+                    <div class="mb-2">
+                        <label>Date:</label>
+                        <input type="date" name="reservationDate" class="form-control" required />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Start Time:</label>
+                        <input type="time" name="startTime" class="form-control" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Reserve (2 Hours)</button>
+                </form>
+            </div>
+        }
+    </div>
+</div> *@

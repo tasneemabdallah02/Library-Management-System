@@ -1,0 +1,347 @@
+﻿
+@model Project5_test.Models.User
+@{
+    Layout = "~/Views/Shared/_Layoutupdated.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Marcellus&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --gold-primary: #d4af37;
+        --gold-bright: #f1d592;
+        --black-deep: #0a0a0b;
+        --glass-surface: rgba(255, 255, 255, 0.03);
+        --border-gold: rgba(212, 175, 55, 0.2);
+    }
+
+    body {
+        background-color: var(--black-deep);
+        color: #ffffff;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        background-image: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 1000px;
+        padding: 60px 20px;
+        margin: auto;
+    }
+
+    /* البطاقة الرئيسية الفاخرة */
+    .main-card {
+        background: linear-gradient(145deg, #161618 0%, #0c0c0d 100%);
+        border: 1px solid var(--border-gold);
+        border-radius: 0; /* زوايا حادة للفخامة الكلاسيكية */
+        padding: 50px;
+        position: relative;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        overflow: hidden;
+    }
+
+        /* زخارف الزوايا */
+        .main-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            border-top: 2px solid var(--gold-primary);
+            border-left: 2px solid var(--gold-primary);
+            opacity: 0.3;
+        }
+
+    /* الهيدر العلوي للملف الشخصي */
+    .profile-header-wrapper {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        margin-bottom: 50px;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        padding-bottom: 40px;
+    }
+
+    .profile-pic-container {
+        position: relative;
+        padding: 8px;
+        border: 1px solid var(--gold-primary);
+    }
+
+    .profile-pic-placeholder {
+        width: 180px;
+        height: 180px;
+        background-color: #1a1a1a;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(20%) contrast(110%);
+        transition: transform 0.5s ease;
+    }
+
+    .profile-pic-container:hover .profile-img {
+        transform: scale(1.05);
+    }
+
+    .user-essential-info {
+        flex-grow: 1;
+    }
+
+    .user-name {
+        font-family: 'Cinzel', serif;
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+        color: #fff;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+    .user-role {
+        font-family: 'Marcellus', serif;
+        color: var(--gold-primary);
+        letter-spacing: 6px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    /* شبكة المعلومات */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .info-item {
+        background: var(--glass-surface);
+        padding: 20px;
+        border-left: 2px solid var(--gold-primary);
+    }
+
+    .info-label {
+        display: block;
+        font-family: 'Cinzel', serif;
+        font-size: 0.65rem;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .info-value {
+        font-family: 'Marcellus', serif;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    /* أزرار الإجراءات */
+    .action-links {
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn-elite {
+        padding: 12px 25px;
+        text-decoration: none;
+        font-family: 'Cinzel', serif;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border: 1px solid var(--gold-primary);
+        color: var(--gold-primary);
+        transition: 0.4s;
+        background: transparent;
+    }
+
+        .btn-elite:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+    /* قسم الكتب والنشاط */
+    .section-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.2rem;
+        letter-spacing: 5px;
+        color: #fff;
+        margin: 60px 0 30px 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+        .section-title::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold-primary), transparent);
+        }
+
+    .inner-content-card {
+        background: rgba(255,255,255,0.02);
+        padding: 40px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .books-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .book-card {
+        text-align: center;
+        transition: 0.4s;
+    }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+        }
+
+    .book-img-wrapper {
+        width: 100%;
+        aspect-ratio: 2/3;
+        overflow: hidden;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        margin-bottom: 15px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    }
+
+    .book-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .book-title {
+        font-family: 'Marcellus', serif;
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.7);
+        letter-spacing: 1px;
+    }
+
+    .content-divider {
+        height: 1px;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+        margin: 40px 0;
+    }
+
+    @@media (max-width: 768px) {
+        .profile-header-wrapper {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-links {
+            justify-content: center;
+        }
+
+        .main-card {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<div class="app-container">
+    <div class="main-card">
+
+        <!-- الهيدر -->
+        <div class="profile-header-wrapper">
+            <div class="profile-pic-container">
+                <div class="profile-pic-placeholder">
+                    <img src="@(string.IsNullOrEmpty(Model?.ProfilePicture)
+                                                               ? Url.Content("~/Images/profilpic.jpg")
+                                                               : Url.Content(Model.ProfilePicture))"
+                         class="profile-img" />
+                </div>
+            </div>
+
+            <div class="user-essential-info">
+                <span class="user-role">Elite Member</span>
+                <h1 class="user-name">@Model.FirstName @Model.LastName</h1>
+
+                <div class="action-links">
+                    <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn-elite">
+                        <i class="fas fa-edit"></i> Edit Credentials
+                    </a>
+                    <a asp-action="ResetPassword" asp-route-id="@Model.UserId" class="btn-elite">
+                        <i class="fas fa-key"></i> Reset Password
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- معلومات الاتصال -->
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Email</span>
+                <div class="info-value">@Model.Email</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Phone Number</span>
+                <div class="info-value">@(string.IsNullOrEmpty(Model.Phone) ? "Not Provided" : Model.Phone)</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Active Reservations</span>
+                <div class="info-value">@((Model.RoomReservations?.Count ?? 0)) Reservation</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Archive Access</span>
+                <div class="info-value">Level: Sovereign</div>
+            </div>
+        </div>
+
+        <!-- سجل القراءة -->
+        <div class="section-title">The Reading Archives</div>
+
+        <div class="inner-content-card">
+            @{
+                var borrowings = Model.Borrowings?.ToList() ?? new List<Project5_test.Models.Borrowing>();
+                int chunkSize = 4;
+            }
+
+            @for (int i = 0; i < Math.Ceiling((double)borrowings.Count / chunkSize); i++)
+            {
+                <div class="books-row">
+                    @foreach (var borrow in borrowings.Skip(i * chunkSize).Take(chunkSize))
+                    {
+                        <div class="book-card">
+                            <div class="book-img-wrapper">
+                                <img src="@borrow.Book.ImagePath" class="book-img" alt="Book Cover" />
+                            </div>
+                            <div class="book-title">@borrow.Book.BookName</div>
+                        </div>
+                    }
+                </div>
+                @if (i < Math.Ceiling((double)borrowings.Count / chunkSize) - 1)
+                {
+                    <div class="content-divider"></div>
+                }
+            }
+
+            @if (!borrowings.Any())
+            {
+                <div style="text-align: center; color: rgba(255,255,255,0.2); font-family: 'Cinzel'; padding: 40px;">
+                    No archives found in your possession.
+                </div>
+            }
+        </div>
+    </div>
+</div>

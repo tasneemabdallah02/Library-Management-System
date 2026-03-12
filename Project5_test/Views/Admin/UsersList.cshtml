@@ -1,0 +1,304 @@
+﻿@model List<Project5_test.Models.User>
+@{
+    Layout = "/Views/Shared/_LayoutDash.cshtml";
+}
+
+<style>
+    :root {
+        --gold-primary: #d4af37;
+        --gold-soft: #f4d03f;
+        --black-deep: #050507;
+        --black-surface: #0a0a0c;
+        --admin-red: #8b0000;
+        --border-gold: rgba(212, 175, 55, 0.2);
+        --text-mid: #94949e;
+    }
+
+    .users-page {
+        padding: 3rem;
+        background-color: var(--black-deep);
+        /* خلفية هندسية متناسقة مع صفحة الدخول */
+        background-image: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 40%), linear-gradient(rgba(5, 5, 7, 0.97), rgba(5, 5, 7, 0.97)), url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg stroke='%23d4af37' stroke-width='0.5' stroke-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2v-4h4v-2H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        min-height: 100vh;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--border-gold);
+        padding-bottom: 1.5rem;
+    }
+
+    .page-title h2 {
+        font-family: 'Cinzel', serif;
+        color: white;
+        font-weight: 700;
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .page-title p {
+        font-family: 'Marcellus', serif;
+        color: var(--gold-primary);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        margin-top: 8px;
+    }
+
+    /* كرت الجدول الإداري */
+    .table-container {
+        background-color: var(--black-surface);
+        border: 1px solid var(--border-gold);
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .custom-table th {
+            background-color: rgba(212, 175, 55, 0.03);
+            color: var(--gold-primary);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid var(--border-gold);
+            text-align: left;
+        }
+
+        .custom-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: 0.3s;
+        }
+
+            .custom-table tbody tr:hover {
+                background-color: rgba(212, 175, 55, 0.02);
+            }
+
+        .custom-table td {
+            padding: 1.2rem 1rem;
+            vertical-align: middle;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+    /* صورة المستخدم الملكية */
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid var(--gold-primary);
+        padding: 2px;
+        background: var(--black-deep);
+    }
+
+    .user-info-cell {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-name {
+        font-family: 'Cinzel', serif;
+        font-weight: 600;
+        display: block;
+        letter-spacing: 1px;
+        color: #fff;
+    }
+
+    .user-email-sub {
+        font-size: 0.7rem;
+        color: var(--text-mid);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* الأزرار النخبوية */
+    .action-btns {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.4s;
+        border: 1px solid transparent;
+        cursor: pointer;
+        background: transparent;
+        text-decoration: none;
+    }
+
+    .btn-view {
+        color: var(--gold-primary);
+        border-color: rgba(212, 175, 55, 0.3);
+    }
+
+        .btn-view:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+    .btn-delete-admin {
+        color: #ff5e5e;
+        border-color: rgba(139, 0, 0, 0.3);
+    }
+
+        .btn-delete-admin:hover {
+            background: var(--admin-red);
+            color: white;
+            border-color: var(--admin-red);
+        }
+
+    .badge-role {
+        padding: 5px 12px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        font-family: 'Cinzel', serif;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        color: var(--gold-primary);
+        background: rgba(212, 175, 55, 0.05);
+        text-transform: uppercase;
+    }
+
+    .badge-status-active {
+        color: #2ecc71;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* زر التصدير */
+    .btn-export {
+        background: transparent;
+        border: 1px solid var(--gold-primary);
+        color: var(--gold-primary);
+        padding: 12px 25px;
+        text-decoration: none;
+        font-family: 'Cinzel', serif;
+        font-size: 0.75rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.5s;
+    }
+
+        .btn-export:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+    .total-badge {
+        font-family: 'Cinzel';
+        color: var(--gold-primary);
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+    }
+</style>
+
+<div class="users-page">
+    <div class="page-header">
+        <div class="page-title">
+            <h2>Grand Archives</h2>
+            <p>Sovereign User Directory & Access Control</p>
+        </div>
+        <div class="header-actions">
+            <span class="total-badge">Registered Subjects: @Model.Count</span>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Subject Identity</th>
+                    <th>Communication</th>
+                    <th>Clearance Level</th>
+                    <th>Node Status</th>
+                    <th style="text-align: center;">Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="user-info-cell">
+                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                                {
+                                    <img src="@user.ProfilePicture" class="user-avatar" alt="Avatar" />
+                                }
+                                else
+                                {
+                                    <img src="https://ui-avatars.com/api/?name=@(user.FirstName ?? "U")&background=050507&color=d4af37" class="user-avatar" />
+                                }
+                                <div>
+                                    <span class="user-name">@user.FirstName @user.LastName</span>
+                                    <span class="user-email-sub">ID: #@user.UserId</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="color: #fff; font-size: 0.85rem;">@user.Email</div>
+                            <div style="font-size: 0.7rem; color: var(--gold-primary); opacity: 0.6;">@user.Phone</div>
+                        </td>
+                        <td>
+                            <span class="badge-role">@(user.Role ?? "Member")</span>
+                        </td>
+                        <td>
+                            <span class="badge-status-active">
+                                <i class="fas fa-circle" style="font-size: 0.4rem; vertical-align: middle; margin-right: 5px;"></i>
+                                @(user.AccountStatus ?? "Active")
+                            </span>
+                        </td>
+
+                        <td style="text-align: center;">
+                            <div class="action-btns" style="justify-content: center;">
+                                <a asp-action="UserDetails" asp-route-id="@user.UserId" class="btn-action btn-view" title="Inspect">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <form asp-action="DeleteUser" asp-route-id="@user.UserId" method="post" onsubmit="return confirm('Revoke access for this subject permanently?');">
+                                    <button type="submit" class="btn-action btn-delete-admin" title="Terminate">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="export-container" style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+        <a asp-action="ExportUsersPdf"
+           asp-controller="Admin"
+           asp-route-filter="all"
+           class="btn-export">
+            <i class="fas fa-print"></i> Generate Sovereign Report
+        </a>
+    </div>
+</div>

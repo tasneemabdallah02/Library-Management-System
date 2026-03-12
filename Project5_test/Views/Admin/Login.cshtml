@@ -1,0 +1,309 @@
+﻿@model Project5_test.Models.User
+@{
+    Layout = null;
+}
+    <title>Grand Administrator - The Royal Archive</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Marcellus&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+            input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+        :root {
+            --gold-primary: #d4af37;
+            --gold-dark: #aa8c2e;
+            --black-deep: #050507;
+            --admin-red: #8b0000;
+            --glass-bg: rgba(7, 7, 10, 0.95);
+            --border-gold: rgba(212, 175, 55, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* تصنيع خلفية ملكية عميقة باستخدام التدرجات والأنماط الهندسية */
+        body {
+            height: 100vh;
+            background-color: var(--black-deep);
+            /* طبقات من التدرجات لعمل عمق بصري */
+            background-image: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(139, 0, 0, 0.05) 0%, transparent 40%), linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+            /* نمط هندسي دقيق (Grid) */
+            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg stroke='%23d4af37' stroke-width='0.5' stroke-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2v-4h4v-2H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+            /* تأثير جزيئات ضوئية متحركة في الخلفية */
+            body::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url('https://www.transparenttextures.com/patterns/stardust.png');
+                opacity: 0.2;
+                pointer-events: none;
+            }
+
+        .ambient-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 0;
+        }
+
+        .login-card {
+            width: 480px;
+            padding: 70px 50px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--border-gold);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 50px 120px rgba(0,0,0,1);
+            text-align: center;
+        }
+
+        /* Admin Seal Icon */
+        .admin-seal {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 2rem;
+            position: relative;
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+            .admin-seal::after {
+                content: "";
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                border: 1px dashed var(--gold-primary);
+                border-radius: 50%;
+                opacity: 0.2;
+                animation: rotate 30s linear infinite;
+            }
+
+        @@keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .brand-header {
+            margin-bottom: 45px;
+        }
+
+            .brand-header h2 {
+                font-family: 'Cinzel', serif;
+                font-size: 1.8rem;
+                letter-spacing: 6px;
+                text-transform: uppercase;
+                color: #fff;
+                margin-bottom: 8px;
+                text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            }
+
+        .brand-sub {
+            font-family: 'Marcellus', serif;
+            color: var(--gold-primary);
+            font-size: 0.65rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            display: inline-block;
+            border: 1px solid var(--admin-red);
+            color: #ff5e5e;
+            padding: 4px 15px;
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            margin-top: 20px;
+            font-family: 'Cinzel';
+            background: rgba(139, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+            .form-group label {
+                font-family: 'Cinzel';
+                font-size: 0.6rem;
+                color: var(--gold-soft);
+                letter-spacing: 2px;
+                display: block;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                opacity: 0.8;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.4s;
+        }
+
+            .form-control:focus {
+                border-bottom: 1px solid var(--gold-primary);
+                box-shadow: 0 10px 10px -10px rgba(212, 175, 55, 0.3);
+            }
+
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0 40px;
+        }
+
+        .remember-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+            .remember-label input {
+                accent-color: var(--gold-primary);
+            }
+
+        .btn-elite {
+            width: 100%;
+            padding: 18px;
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.5s;
+            font-size: 0.85rem;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-elite:hover {
+                background: var(--gold-primary);
+                color: #000;
+                box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            }
+
+        .security-footer {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+            .security-footer i {
+                margin-right: 8px;
+                color: var(--gold-primary);
+            }
+
+        .error-msg {
+            color: #ff5e5e;
+            font-size: 0.75rem;
+            background: rgba(139, 0, 0, 0.15);
+            border: 1px solid rgba(255, 94, 94, 0.2);
+            padding: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-family: 'Cinzel';
+            letter-spacing: 1px;
+        }
+    </style>
+
+    <div class="ambient-glow"></div>
+
+    <form class="login-card" asp-action="Login" method="post">
+        <!-- أيقونة الختم الإداري -->
+        <div class="admin-seal">
+            <i class="fas fa-fingerprint"></i>
+        </div>
+
+        <div class="brand-header">
+            <h2>Grand Archives</h2>
+            <div class="brand-sub">Official Command Center</div>
+            <div class="status-badge">Administrator Node</div>
+        </div>
+
+        @if (ViewBag.msg != null)
+        {
+            <div class="error-msg">
+                <i class="fas fa-shield-virus"></i> ACCESS REJECTED: @ViewBag.msg
+            </div>
+        }
+
+        <div class="form-group">
+            <label>Admin ID</label>
+            <input name="email" type="email" class="form-control" placeholder="enter admin link" required />
+        </div>
+
+        <div class="form-group">
+            <label>Master Cipher</label>
+            <input name="password" type="password" class="form-control" placeholder="••••••••••••" required />
+        </div>
+
+        <div class="flex-row">
+            <label class="remember-label">
+                <input type="checkbox"> Secure Session
+            </label>
+            <a asp-action="ForgotPassword" style="color: var(--gold-soft); font-size: 0.7rem; text-decoration: none; font-family: 'Cinzel'; opacity: 0.7;">Recover Key</a>
+        </div>
+
+        <button type="submit" class="btn-elite">Authorize Access</button>
+
+        <div class="security-footer">
+            <i class="fas fa-key"></i> Restricted Admin-Only Environment
+        </div>
+    </form>
+
